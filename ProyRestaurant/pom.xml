@@ -11,4 +11,23 @@
         <maven.compiler.target>15</maven.compiler.target>
         <exec.mainClass>com.aculuisdev.proyrestaurant.ProyRestaurant</exec.mainClass>
     </properties>
+    <dependencies>
+    <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>12.2.0.jre11</version>
+    </dependency>
+    <dependency>
+        <groupId>net.sf.jasperreports</groupId>
+        <artifactId>jasperreports</artifactId>
+        <version>6.20.0</version> 
+    </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
 </project>
