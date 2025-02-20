@@ -46,7 +46,7 @@
     <Component class="javax.swing.JLabel" name="lbl_fondo_entrada">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/IMAGENES/restaurant.jpg"/>
+          <Image iconType="2" name="C:\ProyectoRestaurant\ProyectoRestaurant\ProyRestaurant\src\main\java\IMAGENES\restaurant.jpg"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.SoftBevelBorderInfo">
