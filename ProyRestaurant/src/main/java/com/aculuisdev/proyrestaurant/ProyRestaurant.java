@@ -1,12 +1,12 @@
 
 package com.aculuisdev.proyrestaurant;
 
-import UI.Login;
+import UI.Entrada;
 
 public class ProyRestaurant {
     public static void main(String[] args) {
-        Login login = new Login();
-        login.setVisible(true);
-        login.setLocationRelativeTo(null);
+        Entrada entra = new Entrada();
+        entra.setVisible(true);
+        entra.setLocationRelativeTo(null);
     }
 }
