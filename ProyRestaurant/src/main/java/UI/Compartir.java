@@ -1,7 +1,7 @@
 
 package UI;
 
-public class Compartir extends javax.swing.JFrame {
+public class Compartir extends javax.swing.JInternalFrame {
 
     public Compartir() {
         initComponents();

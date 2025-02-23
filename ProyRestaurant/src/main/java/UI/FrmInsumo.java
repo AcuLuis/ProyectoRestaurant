@@ -1,7 +1,7 @@
 
 package UI;
 
-public class FrmInsumo extends javax.swing.JFrame {
+public class FrmInsumo extends javax.swing.JInternalFrame {
 
     public FrmInsumo() {
         initComponents();

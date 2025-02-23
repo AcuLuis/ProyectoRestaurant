@@ -1,7 +1,7 @@
 
 package UI;
 
-public class FrmContratoPorFechas extends javax.swing.JFrame {
+public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
 
     public FrmContratoPorFechas() {
         initComponents();

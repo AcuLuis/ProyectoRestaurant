@@ -53,7 +53,7 @@ public class DbBean {
 
     public boolean conecta(){ //CONEXION A BASE DE DATOS POR DEFAULT
         
-        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=restaurante";
+        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=restaurante;encrypt=true;trustServerCertificate=true";
         String dbDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
         
         try{
@@ -74,7 +74,7 @@ public class DbBean {
     
     public boolean conectaConBd(String nombreServidor){
         
-        String dbURLConBD = "jdbc:sqlserver://"+nombreServidor+":1433;databaseName=restaurante";
+        String dbURLConBD = "jdbc:sqlserver://"+nombreServidor+":1433;databaseName=restaurante;encrypt=true;trustServerCertificate=true";
         String dbDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
             try{
                 Class.forName(dbDriver);
@@ -93,7 +93,7 @@ public class DbBean {
     }
     
     public  boolean databaseExiste() {
-        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=restaurante";
+        String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=restaurante;encrypt=true;trustServerCertificate=true";
         String dbDriver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
         try (Connection connection = DriverManager.getConnection(dbURL, this.login, this.password)) {
             return true;

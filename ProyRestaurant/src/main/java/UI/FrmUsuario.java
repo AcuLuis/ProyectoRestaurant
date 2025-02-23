@@ -1,18 +1,104 @@
 
 package UI;
 
-public class FrmUsuario extends javax.swing.JFrame {
+import BEAN.Empleado;
+import BEAN.LocalR;
+import BEAN.Usuario;
+import DAO.EmpleadoDao;
+import DAO.LocalDao;
+import DAO.UsuarioDao;
+import UTIL.Util;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
+public class FrmUsuario extends javax.swing.JInternalFrame {
+   
+    DefaultTableModel dtmUsuario;
+    DefaultTableModel dtmEmpleado;
+    UsuarioDao uDao = new UsuarioDao();
+    LocalDao lDao = new LocalDao();
+    EmpleadoDao empDao = new EmpleadoDao();
+    int idEmpleado = 0;
+    
     public FrmUsuario() {
         initComponents();
+        dtmUsuario = (DefaultTableModel) this.tbl_usuario.getModel();
+        dtmEmpleado = (DefaultTableModel) this.tbl_empleado_usuario.getModel();
+        this.llenaCmbTipoUsuario();
+        this.llenaTblUsuario(false, "");
+        this.llenaTblEmpleado(false, "");
+        if(this.idEmpleado == 0){
+        
+            this.panel_usuario.setEnabledAt(1, false);
+        }else if(this.idEmpleado != 0){
+            this.panel_usuario.setEnabledAt(1, true);
+        }
     }
+    private void llenaTblUsuario(boolean valida, String cadena){
+    
+        Vector<Usuario> listaUsuario;
+        
+        listaUsuario = uDao.listaUsuario(valida, cadena);
+        dtmUsuario.setRowCount(0);
+        
+        for(int i=0;i<listaUsuario.size();i++){
+            
+            Vector vector = new Vector();
+            vector.addElement(listaUsuario.get(i).getUsuarioID());
+            vector.addElement(listaUsuario.get(i).getIdLocalR());
+            vector.addElement(listaUsuario.get(i).getUsuario());
+            
+            if(listaUsuario.get(i).getTipoUsuario()==1){
+                vector.addElement("Administrador");
+            }else if(listaUsuario.get(i).getTipoUsuario()==2){
+                vector.addElement("Mantenimiento");
+            }else if(listaUsuario.get(i).getTipoUsuario()==3){
+                vector.addElement("Reportes");
+            }else{
+                vector.addElement("Transacciones");
+            }
+            vector.addElement(listaUsuario.get(i).getIdEmpleado());
+            
+            dtmUsuario.addRow(vector);
+        }
+    }
+   private void llenaTblEmpleado(boolean valida, String cadena){
+    
+        Vector<Empleado> listaEmp;
+        
+        
+        listaEmp = empDao.listaEmpleadoNoUsers(valida, cadena);
+        dtmEmpleado.setRowCount(0);
+        
+        for(int i=0;i<listaEmp.size();i++){
+            
+            Vector vector = new Vector();
+            vector.addElement(listaEmp.get(i).getEmpleadoID());
+            vector.addElement(listaEmp.get(i).getNombres());
+            vector.addElement(listaEmp.get(i).getApellidos());
+            vector.addElement(listaEmp.get(i).getDni());
+            
+            dtmEmpleado.addRow(vector);
+        }
+    
+    }
+    private void llenaCmbTipoUsuario(){
+    
+        this.cmb_tipoUsuario_usuario.addItem("");
+        this.cmb_tipoUsuario_usuario.addItem("Administrador");
+        this.cmb_tipoUsuario_usuario.addItem("Mantenimiento");
+        this.cmb_tipoUsuario_usuario.addItem("Reportes");
+        this.cmb_tipoUsuario_usuario.addItem("Transacciones");
+    }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        panel_usuario = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txt_buscar_emp_usuario = new javax.swing.JTextField();
@@ -49,6 +135,15 @@ public class FrmUsuario extends javax.swing.JFrame {
 
         jLabel3.setText("Buscar");
 
+        txt_buscar_emp_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_buscar_emp_usuarioKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_emp_usuarioKeyReleased(evt);
+            }
+        });
+
         tbl_empleado_usuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -60,6 +155,11 @@ public class FrmUsuario extends javax.swing.JFrame {
                 "EMPLEADO ID", "NOMBRE", "APELLIDO", "DNI"
             }
         ));
+        tbl_empleado_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_empleado_usuarioMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_empleado_usuario);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -90,7 +190,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Busca Empleado", jPanel1);
+        panel_usuario.addTab("Busca Empleado", jPanel1);
 
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -105,10 +205,25 @@ public class FrmUsuario extends javax.swing.JFrame {
         jLabel8.setText("ID EMPLEADO");
 
         btn_grabar_usuario.setText("Grabar");
+        btn_grabar_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_grabar_usuarioActionPerformed(evt);
+            }
+        });
 
         btn_eliminar_usuario.setText("Eliminar");
+        btn_eliminar_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_usuarioActionPerformed(evt);
+            }
+        });
 
         btn_volver_usuario.setText("Volver");
+        btn_volver_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_volver_usuarioActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("CONTRASEÑA");
 
@@ -178,7 +293,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 .addGap(53, 53, 53))
         );
 
-        jTabbedPane1.addTab("Usuario", jPanel2);
+        panel_usuario.addTab("Usuario", jPanel2);
 
         tbl_usuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,11 +306,32 @@ public class FrmUsuario extends javax.swing.JFrame {
                 "ID USUARIO", "LOCAL", "USUARIO", "TIPO USUARIO", "EMPLEADO"
             }
         ));
+        tbl_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_usuarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_usuario);
 
         jLabel2.setText("Buscar");
 
+        txt_buscar_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_buscar_usuarioActionPerformed(evt);
+            }
+        });
+        txt_buscar_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_usuarioKeyReleased(evt);
+            }
+        });
+
         btn_salir_usuario.setText("SALIR");
+        btn_salir_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_usuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,7 +347,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btn_salir_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(panel_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(39, 39, 39)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -229,7 +365,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panel_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -245,6 +381,170 @@ public class FrmUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_salir_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_usuarioActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_usuarioActionPerformed
+
+    private void txt_buscar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_buscar_usuarioActionPerformed
+
+    }//GEN-LAST:event_txt_buscar_usuarioActionPerformed
+
+    private void txt_buscar_emp_usuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_emp_usuarioKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_buscar_emp_usuarioKeyPressed
+
+    private void txt_buscar_usuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_usuarioKeyReleased
+        if(this.txt_buscar_usuario.getText().isEmpty()){
+            this.llenaTblUsuario(false, "");
+        }else{
+            this.llenaTblUsuario(true, this.txt_buscar_usuario.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_usuarioKeyReleased
+
+    private void txt_buscar_emp_usuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_emp_usuarioKeyReleased
+        if(this.txt_buscar_emp_usuario.getText().isEmpty()){
+            this.llenaTblEmpleado(false, "");
+        }else{
+            this.llenaTblEmpleado(true, this.txt_buscar_emp_usuario.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_emp_usuarioKeyReleased
+
+    private void tbl_empleado_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_empleado_usuarioMouseClicked
+        int idx = this.tbl_empleado_usuario.getSelectedRow();
+        
+        idEmpleado  = (int) this.dtmEmpleado.getValueAt(idx, 0);
+        
+        this.panel_usuario.setEnabledAt(1, true);
+        this.panel_usuario.setSelectedIndex(1);
+                Vector<LocalR> listaLocal = new Vector<LocalR>();
+        listaLocal = lDao.listaLocal();
+        int id=0;
+        for (int i =0; i<listaLocal.size();i++){
+            id = listaLocal.get(i).getIdLocalR();
+        }
+        
+        Util u = new Util();
+        this.txt_idUsuario_usuario.setText(Integer.toString(u.idNext("Usuario", "usuarioID")));
+        this.txt_idLocal_usuario.setText(Integer.toString(id));
+        this.txt_idEmp_usuario.setText(Integer.toString(idEmpleado));
+        this.panel_usuario.setEnabledAt(0, false);
+    }//GEN-LAST:event_tbl_empleado_usuarioMouseClicked
+
+    private void btn_grabar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_usuarioActionPerformed
+        if(this.valida()==true){
+        
+            if(this.btn_eliminar_usuario.getText().equals("Grabar")){
+            
+                Usuario user = new Usuario();
+                
+                user.setUsuarioID(Integer.parseInt(this.txt_idUsuario_usuario.getText()));
+                user.setIdLocalR(Integer.parseInt(this.txt_idLocal_usuario.getText()));
+                user.setUsuario(this.txt_usuario.getText());
+                user.setContrasena(this.txt_contra_usuario.getText());
+                if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Administrador")){
+                    user.setTipoUsuario(1);
+                }else if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Mantenimiento")){
+                    user.setTipoUsuario(2);
+                }else if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Reportes")){
+                    user.setTipoUsuario(3);
+                }else{
+                    user.setTipoUsuario(4);
+                }
+                user.setIdEmpleado(Integer.parseInt(this.txt_idEmp_usuario.getText()));
+                
+                this.uDao.insertaUsuario(user);
+                this.limpiar();
+                this.llenaTblUsuario(false, "");
+                this.llenaTblEmpleado(false, "");
+                
+            }else{
+                Usuario user = new Usuario();
+                
+                user.setUsuarioID(Integer.parseInt(this.txt_idUsuario_usuario.getText()));
+                user.setIdLocalR(Integer.parseInt(this.txt_idLocal_usuario.getText()));
+                user.setUsuario(this.txt_usuario.getText());
+                if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Administrador")){
+                    user.setTipoUsuario(1);
+                }else if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Mantenimiento")){
+                    user.setTipoUsuario(2);
+                }else if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("Reportes")){
+                    user.setTipoUsuario(3);
+                }else{
+                    user.setTipoUsuario(4);
+                }
+                user.setIdEmpleado(Integer.parseInt(this.txt_idEmp_usuario.getText()));
+                
+                this.uDao.actualizarUsuario(user);
+                this.llenaTblUsuario(false, "");
+                this.limpiar();
+                
+            }
+        
+        }
+    }//GEN-LAST:event_btn_grabar_usuarioActionPerformed
+
+    private void tbl_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_usuarioMouseClicked
+        this.btn_grabar_usuario.setText("Actualizar");
+        this.panel_usuario.setSelectedIndex(1);
+        this.panel_usuario.setEnabledAt(1, true);
+        int idx = this.tbl_usuario.getSelectedRow();
+        
+        this.txt_idUsuario_usuario.setText(this.dtmUsuario.getValueAt(idx,0).toString());
+        this.txt_idLocal_usuario.setText(this.dtmUsuario.getValueAt(idx, 1).toString());
+        this.txt_usuario.setText(this.dtmUsuario.getValueAt(idx, 2).toString());
+        this.cmb_tipoUsuario_usuario.setSelectedItem(this.dtmUsuario.getValueAt(idx, 3).toString());
+        this.txt_idEmp_usuario.setText(this.dtmUsuario.getValueAt(idx, 4).toString());
+        this.txt_contra_usuario.setEnabled(false);
+        this.panel_usuario.setEnabledAt(0, false);
+    }//GEN-LAST:event_tbl_usuarioMouseClicked
+
+    private void btn_volver_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_volver_usuarioActionPerformed
+        this.limpiar();
+    }//GEN-LAST:event_btn_volver_usuarioActionPerformed
+
+    private void btn_eliminar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_usuarioActionPerformed
+        int idx = this.tbl_usuario.getSelectedRow();
+        Usuario user = new Usuario();
+        
+        user.setUsuarioID(Integer.parseInt(this.dtmUsuario.getValueAt(idx, 0).toString()));
+        
+        this.uDao.eliminarUsuario(user);
+        this.llenaTblUsuario(false, "");
+        this.llenaTblEmpleado(false, "");
+        this.limpiar();
+    }//GEN-LAST:event_btn_eliminar_usuarioActionPerformed
+
+    private boolean valida(){
+    
+        if (this.txt_usuario.getText().isEmpty() && this.cmb_tipoUsuario_usuario.getSelectedItem().equals("")){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR LOS CAMPOS");
+            
+        }else if(this.txt_usuario.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR USUARIO");
+        }else if(this.cmb_tipoUsuario_usuario.getSelectedItem().equals("")){
+        
+            JOptionPane.showMessageDialog(null, "FALTA SELECCIONAR TIPO USUARIO");
+        }else {
+            return true;
+        }
+        return false;
+    }
+    
+    
+    private void limpiar(){
+    
+        this.txt_usuario.setText("");
+        this.cmb_tipoUsuario_usuario.setSelectedItem("");
+        this.panel_usuario.setSelectedIndex(0);
+        idEmpleado =0;
+        this.panel_usuario.setEnabledAt(1, false);
+        this.panel_usuario.setEnabledAt(0, true);
+        this.btn_grabar_usuario.setText("Grabar");
+        this.txt_contra_usuario.setEnabled(true);
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_eliminar_usuario;
     private javax.swing.JButton btn_grabar_usuario;
@@ -264,7 +564,7 @@ public class FrmUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane panel_usuario;
     private javax.swing.JTable tbl_empleado_usuario;
     private javax.swing.JTable tbl_usuario;
     private javax.swing.JTextField txt_buscar_emp_usuario;

@@ -1,7 +1,7 @@
 
 package UI;
 
-public class FrmInsumoPorPrecioUnitario extends javax.swing.JFrame {
+public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
 
     public FrmInsumoPorPrecioUnitario() {
         initComponents();

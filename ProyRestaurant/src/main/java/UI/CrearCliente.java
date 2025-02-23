@@ -1,7 +1,7 @@
 
 package UI;
 
-public class CrearCliente extends javax.swing.JFrame {
+public class CrearCliente extends javax.swing.JInternalFrame {
 
     public CrearCliente() {
         initComponents();

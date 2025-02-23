@@ -1,7 +1,7 @@
 
 package UI;
 
-public class FrmContrato extends javax.swing.JFrame {
+public class FrmContrato extends javax.swing.JInternalFrame {
 
     public FrmContrato() {
         initComponents();

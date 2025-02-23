@@ -1,7 +1,7 @@
 
 package UI;
 
-public class OrdenCompra extends javax.swing.JFrame {
+public class OrdenCompra extends javax.swing.JInternalFrame {
 
     public OrdenCompra() {
         initComponents();

@@ -1,7 +1,7 @@
 
 package UI;
 
-public class FrmArea extends javax.swing.JFrame {
+public class FrmArea extends javax.swing.JInternalFrame{
 
     public FrmArea() {
         initComponents();
