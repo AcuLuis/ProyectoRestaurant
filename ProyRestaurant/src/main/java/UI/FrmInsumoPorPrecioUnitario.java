@@ -1,6 +1,11 @@
 
 package UI;
 
+import UTIL.DbBean;
+import java.sql.SQLException;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JRException;
+
 public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
 
     public FrmInsumoPorPrecioUnitario() {
@@ -19,7 +24,7 @@ public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
         btn_producirReporte_insumoxprecio = new javax.swing.JButton();
         btn_salir_insumoxprecio = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("REPORTE INSUMO POR PRECIO UNITARIO");
@@ -29,6 +34,11 @@ public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
         jLabel3.setText("Hasta");
 
         btn_producirReporte_insumoxprecio.setText("Producir Reporte");
+        btn_producirReporte_insumoxprecio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_producirReporte_insumoxprecioActionPerformed(evt);
+            }
+        });
 
         btn_salir_insumoxprecio.setText("SALIR");
         btn_salir_insumoxprecio.addActionListener(new java.awt.event.ActionListener() {
@@ -82,8 +92,27 @@ public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_salir_insumoxprecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_insumoxprecioActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btn_salir_insumoxprecioActionPerformed
+
+    private void btn_producirReporte_insumoxprecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_producirReporte_insumoxprecioActionPerformed
+         Double d,a;
+        d=Double.parseDouble(this.txt_desde_insumoxprecio.getText());
+        a=Double.parseDouble(this.txt_hasta_insumoxprecio.getText());
+        HashMap map = new HashMap();
+        map.put("precioMin",d);
+        map.put("precioMax",a);
+        try{
+            String r = "src/REPORTES/repInsumoPorPrecio.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, map, true);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+        this.dispose();
+    }//GEN-LAST:event_btn_producirReporte_insumoxprecioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_producirReporte_insumoxprecio;

@@ -1,6 +1,11 @@
 
 package UI;
 
+import UTIL.DbBean;
+import java.sql.SQLException;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JRException;
+
 public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
 
     public FrmContratoPorFechas() {
@@ -20,7 +25,7 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
         btn_reporte_contratoxfechas = new javax.swing.JButton();
         btn_salircontratoxfechas = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("CONTRATO DE RANGO POR FECHAS");
@@ -50,13 +55,8 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jLabel1)))
+                .addGap(85, 85, 85)
+                .addComponent(jLabel1)
                 .addContainerGap(91, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(147, 147, 147)
@@ -75,9 +75,11 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
                                 .addComponent(btn_salircontratoxfechas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(17, 17, 17))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_fecha_inicio_contratoxfechas)
-                                    .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_fecha_inicio_contratoxfechas)
+                                        .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                                    .addComponent(jLabel2))
                                 .addContainerGap(205, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
@@ -106,11 +108,33 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_reporte_contratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reporte_contratoxfechasActionPerformed
-        // TODO add your handling code here:
+        String fechaIni, fechaFin;
+        
+        fechaIni = this.txt_fecha_inicio_contratoxfechas.getText();
+        fechaFin = this.txt_fecha_fin_contratoxfechas.getText();
+        
+        HashMap map = new HashMap();
+        
+        map.put("fechaIni", fechaIni);
+        map.put("fechaFin", fechaFin);
+        
+        try{
+        
+            String r = "src/REPORTES/repContratoPorFechas.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, map, true);
+        }catch(SQLException e){
+        
+            e.printStackTrace();
+        }catch(JRException ex){
+        
+            ex.printStackTrace();
+        }
+        this.dispose();
     }//GEN-LAST:event_btn_reporte_contratoxfechasActionPerformed
 
     private void btn_salircontratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salircontratoxfechasActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btn_salircontratoxfechasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,12 +1,24 @@
 
 package UI;
 
+import BEAN.LocalR;
 import DAO.LocalDao;
 import DAO.UsuarioDao;
+import DAO.inciaBdDao;
+import UTIL.DbBean;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 
 public class MdiEscritorio extends javax.swing.JFrame {
     
@@ -124,6 +136,11 @@ public class MdiEscritorio extends javax.swing.JFrame {
         mnuItem_completa_bd.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\bd.jpg")); // NOI18N
         mnuItem_completa_bd.setMnemonic('s');
         mnuItem_completa_bd.setText("Completar BD por Defecto");
+        mnuItem_completa_bd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_completa_bdActionPerformed(evt);
+            }
+        });
         mnu_admin.add(mnuItem_completa_bd);
 
         menuBar.add(mnu_admin);
@@ -135,16 +152,31 @@ public class MdiEscritorio extends javax.swing.JFrame {
         mnuItem_mante_contrato.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\contrato.jpg")); // NOI18N
         mnuItem_mante_contrato.setMnemonic('t');
         mnuItem_mante_contrato.setText("Contrato");
+        mnuItem_mante_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_mante_contratoActionPerformed(evt);
+            }
+        });
         mnu_mantenimiento.add(mnuItem_mante_contrato);
 
         mnuItem_mante_rol.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\rol.jpg")); // NOI18N
         mnuItem_mante_rol.setMnemonic('y');
         mnuItem_mante_rol.setText("Rol");
+        mnuItem_mante_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_mante_rolActionPerformed(evt);
+            }
+        });
         mnu_mantenimiento.add(mnuItem_mante_rol);
 
         mnuItem_mante_area.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\area.jpg")); // NOI18N
         mnuItem_mante_area.setMnemonic('p');
         mnuItem_mante_area.setText("Area");
+        mnuItem_mante_area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_mante_areaActionPerformed(evt);
+            }
+        });
         mnu_mantenimiento.add(mnuItem_mante_area);
 
         mnuItem_mante_producto.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\producto.jpg")); // NOI18N
@@ -159,6 +191,11 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_mante_insumo.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\insumo.jpg")); // NOI18N
         mnuItem_mante_insumo.setText("Insumo");
+        mnuItem_mante_insumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_mante_insumoActionPerformed(evt);
+            }
+        });
         mnu_mantenimiento.add(mnuItem_mante_insumo);
 
         menuBar.add(mnu_mantenimiento);
@@ -170,11 +207,21 @@ public class MdiEscritorio extends javax.swing.JFrame {
         mnuItem_reporte_contrato.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\contrato.jpg")); // NOI18N
         mnuItem_reporte_contrato.setMnemonic('c');
         mnuItem_reporte_contrato.setText("Reporte Contrato");
+        mnuItem_reporte_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_reporte_contratoActionPerformed(evt);
+            }
+        });
         mnu_reportes.add(mnuItem_reporte_contrato);
 
         mnuItem_reporte_area.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\area.jpg")); // NOI18N
         mnuItem_reporte_area.setMnemonic('a');
         mnuItem_reporte_area.setText("Reporte Area");
+        mnuItem_reporte_area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_reporte_areaActionPerformed(evt);
+            }
+        });
         mnu_reportes.add(mnuItem_reporte_area);
 
         mnuItem_reporte_rol.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\rol.jpg")); // NOI18N
@@ -188,10 +235,20 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_reporte_producto.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\producto.jpg")); // NOI18N
         mnuItem_reporte_producto.setText("Reporte Producto");
+        mnuItem_reporte_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_reporte_productoActionPerformed(evt);
+            }
+        });
         mnu_reportes.add(mnuItem_reporte_producto);
 
         mnuItem_reporte_insumo.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\insumo.jpg")); // NOI18N
         mnuItem_reporte_insumo.setText("Reporte Insumo");
+        mnuItem_reporte_insumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_reporte_insumoActionPerformed(evt);
+            }
+        });
         mnu_reportes.add(mnuItem_reporte_insumo);
 
         menuBar.add(mnu_reportes);
@@ -201,22 +258,47 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_repPara_contrato_fecha.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\tiempo.jpg")); // NOI18N
         mnuItem_repPara_contrato_fecha.setText("Contrato por Fecha");
+        mnuItem_repPara_contrato_fecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_repPara_contrato_fechaActionPerformed(evt);
+            }
+        });
         mnu_reportes_parametro.add(mnuItem_repPara_contrato_fecha);
 
         mnuItem_repPara_contrato_area.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\area.jpg")); // NOI18N
         mnuItem_repPara_contrato_area.setText("Contrato por Area");
+        mnuItem_repPara_contrato_area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_repPara_contrato_areaActionPerformed(evt);
+            }
+        });
         mnu_reportes_parametro.add(mnuItem_repPara_contrato_area);
 
         mnuItem_repPara_contrato_rol.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\rol.jpg")); // NOI18N
         mnuItem_repPara_contrato_rol.setText("Contrato por Rol");
+        mnuItem_repPara_contrato_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_repPara_contrato_rolActionPerformed(evt);
+            }
+        });
         mnu_reportes_parametro.add(mnuItem_repPara_contrato_rol);
 
         mnu_repPara_producto_precio.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\producto.jpg")); // NOI18N
         mnu_repPara_producto_precio.setText("Producto por  Precio");
+        mnu_repPara_producto_precio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnu_repPara_producto_precioActionPerformed(evt);
+            }
+        });
         mnu_reportes_parametro.add(mnu_repPara_producto_precio);
 
         mnu_repPara_insumo_precio.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\insumo.jpg")); // NOI18N
         mnu_repPara_insumo_precio.setText("Insumo por Precio");
+        mnu_repPara_insumo_precio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnu_repPara_insumo_precioActionPerformed(evt);
+            }
+        });
         mnu_reportes_parametro.add(mnu_repPara_insumo_precio);
 
         menuBar.add(mnu_reportes_parametro);
@@ -226,14 +308,29 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnu_tablas_producto_tipoPlato.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\producto.jpg")); // NOI18N
         mnu_tablas_producto_tipoPlato.setText("Producto - Tipo Plato");
+        mnu_tablas_producto_tipoPlato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnu_tablas_producto_tipoPlatoActionPerformed(evt);
+            }
+        });
         mnu_tablas_cruzada.add(mnu_tablas_producto_tipoPlato);
 
         mnuItem_tablas_contrato_area.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\contrato.jpg")); // NOI18N
         mnuItem_tablas_contrato_area.setText("Contrato - Area");
+        mnuItem_tablas_contrato_area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_tablas_contrato_areaActionPerformed(evt);
+            }
+        });
         mnu_tablas_cruzada.add(mnuItem_tablas_contrato_area);
 
         mnuItem_tablas_usuario_ubicacion.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\Ubicacion.jpg")); // NOI18N
         mnuItem_tablas_usuario_ubicacion.setText("Tipo Usuario - Ubicacion");
+        mnuItem_tablas_usuario_ubicacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_tablas_usuario_ubicacionActionPerformed(evt);
+            }
+        });
         mnu_tablas_cruzada.add(mnuItem_tablas_usuario_ubicacion);
 
         menuBar.add(mnu_tablas_cruzada);
@@ -243,6 +340,11 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_correo_gmail.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\Gmail.jpg")); // NOI18N
         mnuItem_correo_gmail.setText("GMAIL");
+        mnuItem_correo_gmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_correo_gmailActionPerformed(evt);
+            }
+        });
         mnu_correo_general.add(mnuItem_correo_gmail);
 
         menuBar.add(mnu_correo_general);
@@ -252,14 +354,29 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_redes_facebook.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\Facebook.jpg")); // NOI18N
         mnuItem_redes_facebook.setText("Facebook");
+        mnuItem_redes_facebook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_redes_facebookActionPerformed(evt);
+            }
+        });
         mnu_redes.add(mnuItem_redes_facebook);
 
         mnuItem_redes_instagram.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\Instagram.jpg")); // NOI18N
         mnuItem_redes_instagram.setText("Instagram");
+        mnuItem_redes_instagram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_redes_instagramActionPerformed(evt);
+            }
+        });
         mnu_redes.add(mnuItem_redes_instagram);
 
         mnuItem_redes_x.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\x.png")); // NOI18N
         mnuItem_redes_x.setText("X");
+        mnuItem_redes_x.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_redes_xActionPerformed(evt);
+            }
+        });
         mnu_redes.add(mnuItem_redes_x);
 
         menuBar.add(mnu_redes);
@@ -269,10 +386,20 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
         mnuItem_tranControl_venta.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\venta.jpg")); // NOI18N
         mnuItem_tranControl_venta.setText("Venta");
+        mnuItem_tranControl_venta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_tranControl_ventaActionPerformed(evt);
+            }
+        });
         mnu_transaccion_control.add(mnuItem_tranControl_venta);
 
         mnuItem_tranControl_controlInventario.setIcon(new javax.swing.ImageIcon("C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\IMAGENES\\inventario.jpg")); // NOI18N
         mnuItem_tranControl_controlInventario.setText("Control de Inventario");
+        mnuItem_tranControl_controlInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuItem_tranControl_controlInventarioActionPerformed(evt);
+            }
+        });
         mnu_transaccion_control.add(mnuItem_tranControl_controlInventario);
 
         menuBar.add(mnu_transaccion_control);
@@ -294,11 +421,24 @@ public class MdiEscritorio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuItem_mante_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_mante_productoActionPerformed
-        // TODO add your handling code here:
+        frmProdu = new FrmProducto();
+        this.desktopPane.add(frmProdu);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmProdu.getSize();
+        frmProdu.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmProdu.setVisible(true); 
     }//GEN-LAST:event_mnuItem_mante_productoActionPerformed
 
     private void mnuItem_reporte_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_rolActionPerformed
-        // TODO add your handling code here:
+        try{
+            String r = "src/REPORTES/repRolSimple.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_mnuItem_reporte_rolActionPerformed
 
     private void mnuItem_agrega_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_agrega_usuarioActionPerformed
@@ -309,6 +449,256 @@ public class MdiEscritorio extends javax.swing.JFrame {
         frmUser.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
         frmUser.setVisible(true);
     }//GEN-LAST:event_mnuItem_agrega_usuarioActionPerformed
+
+    private void mnuItem_completa_bdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_completa_bdActionPerformed
+        inciaBdDao ini = new inciaBdDao();
+        Vector<LocalR> listaLocal = new Vector<LocalR>();
+        listaLocal = lDao.listaLocal();
+        int id=0;
+        for (int i =0; i<listaLocal.size();i++){
+            id = listaLocal.get(i).getIdLocalR();
+        }
+        
+        ini.completaBD(id);
+        
+        JOptionPane.showMessageDialog(null, "BD CORRECTAMENTE COMPLETADA...");
+    }//GEN-LAST:event_mnuItem_completa_bdActionPerformed
+
+    private void mnuItem_mante_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_mante_contratoActionPerformed
+        fContrato = new FrmContrato();
+        this.desktopPane.add(fContrato);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = fContrato.getSize();
+        fContrato.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        fContrato.setVisible(true);
+    }//GEN-LAST:event_mnuItem_mante_contratoActionPerformed
+
+    private void mnuItem_mante_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_mante_rolActionPerformed
+        frmRol = new FrmRol();
+        this.desktopPane.add(frmRol);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmRol.getSize();
+        frmRol.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmRol.setVisible(true);  
+    }//GEN-LAST:event_mnuItem_mante_rolActionPerformed
+
+    private void mnuItem_mante_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_mante_areaActionPerformed
+        frmArea = new FrmArea();
+        this.desktopPane.add(frmArea);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmArea.getSize();
+        frmArea.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmArea.setVisible(true); 
+    }//GEN-LAST:event_mnuItem_mante_areaActionPerformed
+
+    private void mnuItem_mante_insumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_mante_insumoActionPerformed
+        frmInsumo = new FrmInsumo();
+        this.desktopPane.add(frmInsumo);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmInsumo.getSize();
+        frmInsumo.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmInsumo.setVisible(true); 
+    }//GEN-LAST:event_mnuItem_mante_insumoActionPerformed
+
+    private void mnuItem_reporte_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_contratoActionPerformed
+        try{
+            String r = "src/REPORTES/repContratoSimple.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_mnuItem_reporte_contratoActionPerformed
+
+    private void mnuItem_reporte_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_areaActionPerformed
+        try{
+            String r = "src/REPORTES/repAreaSimple.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_mnuItem_reporte_areaActionPerformed
+
+    private void mnuItem_reporte_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_productoActionPerformed
+        try{
+            String r = "src/REPORTES/reportProdSimp.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_mnuItem_reporte_productoActionPerformed
+
+    private void mnuItem_reporte_insumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_insumoActionPerformed
+        try{
+            String r = "src/REPORTES/repInsSimp.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        } 
+    }//GEN-LAST:event_mnuItem_reporte_insumoActionPerformed
+
+    private void mnuItem_repPara_contrato_fechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_repPara_contrato_fechaActionPerformed
+        frmContratoFechas = new FrmContratoPorFechas();
+        this.desktopPane.add(frmContratoFechas);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmContratoFechas.getSize();
+        frmContratoFechas.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmContratoFechas.setVisible(true);
+    }//GEN-LAST:event_mnuItem_repPara_contrato_fechaActionPerformed
+
+    private void mnuItem_repPara_contrato_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_repPara_contrato_areaActionPerformed
+        frmPorArea = new FrmContratoPorArea();
+        this.desktopPane.add(frmPorArea);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmPorArea.getSize();
+        frmPorArea.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmPorArea.setVisible(true);
+    }//GEN-LAST:event_mnuItem_repPara_contrato_areaActionPerformed
+
+    private void mnuItem_repPara_contrato_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_repPara_contrato_rolActionPerformed
+        frmPorRol = new FrmContratoPorRol();
+        this.desktopPane.add(frmPorRol);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmPorRol.getSize();
+        frmPorRol.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmPorRol.setVisible(true);
+    }//GEN-LAST:event_mnuItem_repPara_contrato_rolActionPerformed
+
+    private void mnu_repPara_producto_precioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_repPara_producto_precioActionPerformed
+        frmProdRango = new FrmRepProdRango();
+        this.desktopPane.add(frmProdRango);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmProdRango.getSize();
+        frmProdRango.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmProdRango.setVisible(true);
+    }//GEN-LAST:event_mnu_repPara_producto_precioActionPerformed
+
+    private void mnu_repPara_insumo_precioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_repPara_insumo_precioActionPerformed
+        frmInsuPrecio = new FrmInsumoPorPrecioUnitario();
+        this.desktopPane.add(frmInsuPrecio);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmInsuPrecio.getSize();
+        frmInsuPrecio.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmInsuPrecio.setVisible(true);
+    }//GEN-LAST:event_mnu_repPara_insumo_precioActionPerformed
+
+    private void mnu_tablas_producto_tipoPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_tablas_producto_tipoPlatoActionPerformed
+        try{
+            String r = "src/REPORTES/reporTblCruzProd.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_mnu_tablas_producto_tipoPlatoActionPerformed
+
+    private void mnuItem_tablas_contrato_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tablas_contrato_areaActionPerformed
+        try{
+            String r = "src/REPORTES/reportContratoTblCruz.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_mnuItem_tablas_contrato_areaActionPerformed
+
+    private void mnuItem_tablas_usuario_ubicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tablas_usuario_ubicacionActionPerformed
+        try{
+            String r = "src/REPORTES/reportTblCruzUsuarios.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, null, false);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(JRException ex){
+            ex.printStackTrace();
+        }  
+    }//GEN-LAST:event_mnuItem_tablas_usuario_ubicacionActionPerformed
+
+    private void mnuItem_correo_gmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_correo_gmailActionPerformed
+        compartir = new Compartir();
+        this.desktopPane.add(compartir);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = compartir.getSize();
+        compartir.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        compartir.setVisible(true);
+    }//GEN-LAST:event_mnuItem_correo_gmailActionPerformed
+
+    private void mnuItem_redes_facebookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_redes_facebookActionPerformed
+        if(Desktop.isDesktopSupported()){
+            Desktop desk = Desktop.getDesktop();
+            if(desk.isSupported(Desktop.Action.BROWSE)){
+                try {
+                    desk.browse(new URI("https://www.facebook.com/groups/1237922966896488"));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(MdiEscritorio.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MdiEscritorio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+    }//GEN-LAST:event_mnuItem_redes_facebookActionPerformed
+
+    private void mnuItem_redes_instagramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_redes_instagramActionPerformed
+        if(Desktop.isDesktopSupported()){
+            Desktop desk = Desktop.getDesktop();
+            if(desk.isSupported(Desktop.Action.BROWSE)){
+                try{
+                    desk.browse(new URI("https://www.instagram.com/restaurantepoo/"));
+                }catch(IOException e){
+                    e.printStackTrace();
+                }catch(URISyntaxException e){
+
+                }
+            }
+
+        }
+    }//GEN-LAST:event_mnuItem_redes_instagramActionPerformed
+
+    private void mnuItem_redes_xActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_redes_xActionPerformed
+        if(Desktop.isDesktopSupported()){
+            Desktop desk = Desktop.getDesktop();
+            if(desk.isSupported(Desktop.Action.BROWSE)){
+                try{
+                    desk.browse(new URI("https://twitter.com/POORestaurante_"));
+                }catch(IOException e){
+                    e.printStackTrace();
+                }catch(URISyntaxException e){
+
+                }
+            }
+
+        }
+    }//GEN-LAST:event_mnuItem_redes_xActionPerformed
+
+    private void mnuItem_tranControl_controlInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tranControl_controlInventarioActionPerformed
+        frmOrdenCompra = new OrdenCompra();
+        this.desktopPane.add(frmOrdenCompra);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmOrdenCompra.getSize();
+        frmOrdenCompra.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+        frmOrdenCompra.setVisible(true);
+    }//GEN-LAST:event_mnuItem_tranControl_controlInventarioActionPerformed
+
+    private void mnuItem_tranControl_ventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tranControl_ventaActionPerformed
+        frmVenta = new FrmVenta();
+        frmVenta.setVisible(true);
+    }//GEN-LAST:event_mnuItem_tranControl_ventaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;

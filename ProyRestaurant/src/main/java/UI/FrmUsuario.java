@@ -12,7 +12,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class FrmUsuario extends javax.swing.JInternalFrame {
+public class FrmUsuario extends javax.swing.JFrame {
    
     DefaultTableModel dtmUsuario;
     DefaultTableModel dtmEmpleado;
@@ -29,7 +29,6 @@ public class FrmUsuario extends javax.swing.JInternalFrame {
         this.llenaTblUsuario(false, "");
         this.llenaTblEmpleado(false, "");
         if(this.idEmpleado == 0){
-        
             this.panel_usuario.setEnabledAt(1, false);
         }else if(this.idEmpleado != 0){
             this.panel_usuario.setEnabledAt(1, true);
@@ -126,7 +125,7 @@ public class FrmUsuario extends javax.swing.JInternalFrame {
         txt_buscar_usuario = new javax.swing.JTextField();
         btn_salir_usuario = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("FORMULARIO USUARIO");
@@ -155,6 +154,7 @@ public class FrmUsuario extends javax.swing.JInternalFrame {
                 "EMPLEADO ID", "NOMBRE", "APELLIDO", "DNI"
             }
         ));
+        tbl_empleado_usuario.setRowSelectionAllowed(false);
         tbl_empleado_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_empleado_usuarioMouseClicked(evt);
@@ -360,9 +360,9 @@ public class FrmUsuario extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panel_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)

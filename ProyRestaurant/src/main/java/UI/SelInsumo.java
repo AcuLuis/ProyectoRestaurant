@@ -1,13 +1,38 @@
 
 package UI;
 
-public class SelInsumo extends javax.swing.JDialog {
+import BEAN.Insumo;
+import DAO.InsumoDao;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
+public class SelInsumo extends javax.swing.JDialog {
+    InsumoDao insumoDao= new InsumoDao();
+    DefaultTableModel dtm;
+    Insumo insumo= new Insumo();
     public SelInsumo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        dtm = (DefaultTableModel)this.tbl_insumos_selInsumos.getModel();
+        this.llenaTblInsumo(false, "");
+        this.setLocationRelativeTo(this);
     }
-
+    public void llenaTblInsumo(boolean sw, String cad){
+        Vector<Insumo> listInsumo = insumoDao.ListaItem(sw, cad);
+        dtm.setRowCount(0);
+        for(int i = 0; i<listInsumo.size();i++){
+            Vector vec = new Vector();
+            vec.addElement(listInsumo.get(i).getInsumoID());
+            vec.addElement(listInsumo.get(i).getUnidadMedida());
+            vec.addElement(listInsumo.get(i).getDescripInsumo());
+            vec.addElement(listInsumo.get(i).getPrecioUnit());
+            dtm.addRow(vec);
+            
+        }  
+    }
+         public Insumo devInsumo(){
+            return insumo;
+        }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -25,6 +50,12 @@ public class SelInsumo extends javax.swing.JDialog {
 
         jLabel2.setText("INSUMO");
 
+        txt_insumo_buscarInsumos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_insumo_buscarInsumosKeyReleased(evt);
+            }
+        });
+
         tbl_insumos_selInsumos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -36,6 +67,11 @@ public class SelInsumo extends javax.swing.JDialog {
                 "ID", "UnidadMedida", "Descripcion", "PrecioUnit"
             }
         ));
+        tbl_insumos_selInsumos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_insumos_selInsumosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_insumos_selInsumos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -71,6 +107,24 @@ public class SelInsumo extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_insumo_buscarInsumosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_insumo_buscarInsumosKeyReleased
+        if(this.txt_insumo_buscarInsumos.getText().isEmpty()){
+            this.llenaTblInsumo(false, "");
+        }else{
+            this.llenaTblInsumo(true, this.txt_insumo_buscarInsumos.getText());
+        }
+    }//GEN-LAST:event_txt_insumo_buscarInsumosKeyReleased
+
+    private void tbl_insumos_selInsumosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_insumos_selInsumosMouseClicked
+        int i;
+        i = this.tbl_insumos_selInsumos.getSelectedRow();
+        insumo.setInsumoID(Integer.parseInt(dtm.getValueAt(i,0).toString()));
+        insumo.setUnidadMedida(dtm.getValueAt(i,1).toString());
+        insumo.setDescripInsumo(dtm.getValueAt(i,2).toString());
+        insumo.setPrecioUnit(Double.parseDouble(dtm.getValueAt(i,3).toString()));
+        this.dispose();
+    }//GEN-LAST:event_tbl_insumos_selInsumosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

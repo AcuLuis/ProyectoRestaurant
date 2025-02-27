@@ -1,12 +1,207 @@
 
 package UI;
 
-public class FrmContrato extends javax.swing.JInternalFrame {
+import BEAN.Area;
+import BEAN.Contrato;
+import BEAN.Empleado;
+import BEAN.Rol;
+import DAO.AreaDao;
+import DAO.ContratoDao;
+import DAO.EmpleadoDao;
+import DAO.RolDao;
+import UTIL.Util;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
+public class FrmContrato extends javax.swing.JInternalFrame {
+    DefaultTableModel dtmEmpleado;
+    DefaultTableModel dtmEmpleadoSinContrato;
+    DefaultTableModel dtmContratos;
+    
+    EmpleadoDao empDao = new EmpleadoDao();
+    RolDao rolDao = new RolDao();
+    AreaDao areaDao = new AreaDao();
+    ContratoDao contratoDao = new ContratoDao();
+    Util u = new Util();
+    
+    int idEmpleado = 0;
     public FrmContrato() {
         initComponents();
+        dtmEmpleado = (DefaultTableModel)this.tbl_empgeneral_contrato.getModel();
+        dtmEmpleadoSinContrato = (DefaultTableModel) this.tbl_emp_sin_contrato.getModel();
+        dtmContratos = (DefaultTableModel) this.tbl_contrato.getModel();
+        
+        this.llenaTblEmpleado(false, "");
+        this.llenaTblEmpleadoSinContrato(false, "");
+        this.llenaTblContratos(false, "");
+        this.llenaCmbEstado();
+        
+        
+        if(this.idEmpleado == 0){
+        
+            this.TabPanel_Contrato.setEnabledAt(2, false);
+        }else if(this.idEmpleado != 0){
+            this.TabPanel_Contrato.setEnabledAt(2, true);
+        }
+        
+        this.llenaCmbRol();
+        this.llenaCmbArea();
+    }
+    public void llenaCmbEstado(){
+    
+        this.cmb_estado_contrato.addItem("");
+        this.cmb_estado_contrato.addItem("Activo");
+        this.cmb_estado_contrato.addItem("No Activo");
+    
+    }
+    private void llenaCmbRol(){
+        
+        Vector<Rol> listaRol = new Vector<Rol>();
+        
+        this.cmb_rol_contrato.addItem("");
+        
+        listaRol = this.rolDao.llenaRol();
+        
+        for(int i=0; i<listaRol.size();i++){
+        
+            this.cmb_rol_contrato.addItem(listaRol.get(i).getDescripRol());
+        }
     }
 
+    private void llenaCmbArea(){
+        
+        Vector<Area> listaArea = new Vector<Area>();
+        
+        this.cmb_area_contrato.addItem("");
+        
+        listaArea = this.areaDao.llenaArea();
+        
+        for(int i=0; i<listaArea.size();i++){
+        
+            this.cmb_area_contrato.addItem(listaArea.get(i).getDescripArea());
+        }
+    }
+    public void llenaTblEmpleado(boolean valida, String cadena){
+    
+        Vector<Empleado> listaEmp;
+        
+        listaEmp = empDao.listaEmpleado(valida, cadena);     
+        dtmEmpleado.setRowCount(0);
+        
+        for(int i=0;i<listaEmp.size();i++){
+            
+            Vector vector = new Vector();
+            vector.addElement(listaEmp.get(i).getEmpleadoID());
+            vector.addElement(listaEmp.get(i).getNombres());
+            vector.addElement(listaEmp.get(i).getApellidos());
+            vector.addElement(listaEmp.get(i).getFechaNacimiento());
+            if(listaEmp.get(i).getGenero() == 1){
+                vector.addElement("masculino");
+            }else if (listaEmp.get(i).getGenero() == 0){
+                vector.addElement("femenino");
+            }
+            vector.addElement(listaEmp.get(i).getDni());
+            vector.addElement(listaEmp.get(i).getEstadoCivil());
+            
+            dtmEmpleado.addRow(vector);
+        }
+    }
+    
+    
+    public void llenaTblEmpleadoSinContrato(boolean valida, String cadena){
+    
+        Vector<Empleado> listaEmp;
+        
+        listaEmp = empDao.sinContrato(valida, cadena);     
+        this.dtmEmpleadoSinContrato.setRowCount(0);
+        
+        for(int i=0;i<listaEmp.size();i++){
+            
+            Vector vector = new Vector();
+            vector.addElement(listaEmp.get(i).getEmpleadoID());
+            vector.addElement(listaEmp.get(i).getNombres());
+            vector.addElement(listaEmp.get(i).getApellidos());
+            vector.addElement(listaEmp.get(i).getFechaNacimiento());
+            if(listaEmp.get(i).getGenero() == 1){
+                vector.addElement("masculino");
+            }else if (listaEmp.get(i).getGenero() == 0){
+                vector.addElement("femenino");
+            }
+            vector.addElement(listaEmp.get(i).getDni());
+            vector.addElement(listaEmp.get(i).getEstadoCivil());
+            
+            this.dtmEmpleadoSinContrato.addRow(vector);
+        }
+       
+        
+    }
+    
+    public void llenaTblContratos(boolean valida, String cadena){
+    
+        Vector<Contrato> listaContrato;
+        Util u = new Util();
+        
+        listaContrato = contratoDao.ListaItem(valida, cadena);
+        this.dtmContratos.setRowCount(0);
+        
+        for(int i=0; i<listaContrato.size(); i++){
+        
+            Vector vector = new Vector();
+            
+            vector.addElement(listaContrato.get(i).getContratoID());
+            vector.addElement(listaContrato.get(i).getEmpleadoID());
+            vector.addElement(this.rolDao.devRol(listaContrato.get(i).getRolID()));
+            vector.addElement(this.areaDao.devArea(listaContrato.get(i).getAreaID()));
+            vector.addElement(listaContrato.get(i).getFechaIni());
+            vector.addElement(listaContrato.get(i).getFechaFin());
+            if(listaContrato.get(i).getEstado() == 1){
+                vector.addElement("Activo");
+            }else{
+                vector.addElement("No Activo");
+            }
+            vector.addElement(listaContrato.get(i).getSueldo());
+            
+            this.dtmContratos.addRow(vector);
+        
+        }
+    }
+    private void limpia(){
+        this.txt_empleado_id_contrato.setText("");
+        this.cmb_rol_contrato.setSelectedItem("");
+        this.cmb_area_contrato.setSelectedItem("");
+        this.txt_fecha_inicio_contrato.setText("");
+        this.txt_fecha_fin_contrato.setText("");
+        this.txt_sueldo_contrato.setText("");
+        this.cmb_estado_contrato.setSelectedItem("");
+        this.btn_grabar_contrato.setText("Grabar");
+        this.TabPanel_Contrato.setEnabledAt(2, false);
+        this.TabPanel_Contrato.setEnabledAt(1, true);
+        
+        this.TabPanel_Contrato.setSelectedIndex(1);
+    }
+    private boolean valida(){
+    
+        if (this.txt_fecha_inicio_contrato.getText().isEmpty() && this.cmb_estado_contrato.getSelectedItem().equals("") && this.txt_fecha_fin_contrato.getText().isEmpty()  && this.txt_sueldo_contrato.getText().isEmpty()
+                && this.cmb_rol_contrato.getSelectedItem().equals("") && this.cmb_area_contrato.getSelectedItem().equals("")){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR LOS CAMPOS...");
+        }else if (this.txt_fecha_inicio_contrato.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR LA FECHA DE INICIO...");
+        }else if(this.txt_fecha_fin_contrato.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR LA FECHA DE FIN...");
+        }else if(this.cmb_estado_contrato.getSelectedItem().equals("")){
+            JOptionPane.showMessageDialog(null, "FALTA SELECCIONAR EL ESTADO...");
+        }else if(this.txt_sueldo_contrato.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR EL SUELDO...");
+        }else if(this.cmb_rol_contrato.getSelectedItem().equals("")){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR EL ROL...");
+        }else if(this.cmb_area_contrato.getSelectedItem().equals("")){
+            JOptionPane.showMessageDialog(null, "FALTA LLENAR EL AREA...");
+        }else{
+            return true;
+        }
+        return false;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -51,12 +246,18 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         tbl_contrato = new javax.swing.JTable();
         btn_salir_contrato = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("FORMULARIO CONTRATO");
 
         jLabel3.setText("Buscar");
+
+        txt_busca_empgeneral_contrato.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_busca_empgeneral_contratoKeyReleased(evt);
+            }
+        });
 
         tbl_empgeneral_contrato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,6 +302,12 @@ public class FrmContrato extends javax.swing.JInternalFrame {
 
         lbl.setText("Buscar");
 
+        txt_buscar_emp_sin_contrato.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_emp_sin_contratoKeyReleased(evt);
+            }
+        });
+
         tbl_emp_sin_contrato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -112,6 +319,11 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 "ID", "NOMBRE", "APELLIDOS", "FECHA NAC.", "GENERO", "DNI", "ESTADO CIVIL"
             }
         ));
+        tbl_emp_sin_contrato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_emp_sin_contratoMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tbl_emp_sin_contrato);
 
         javax.swing.GroupLayout panel_emp_sin_contratoLayout = new javax.swing.GroupLayout(panel_emp_sin_contrato);
@@ -195,8 +407,18 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         });
 
         btn_volver_contrato.setText("VOLVER");
+        btn_volver_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_volver_contratoActionPerformed(evt);
+            }
+        });
 
         btn_eliminar_contrato.setText("ELIMINAR");
+        btn_eliminar_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_contratoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_contratoLayout = new javax.swing.GroupLayout(panel_contrato);
         panel_contrato.setLayout(panel_contratoLayout);
@@ -289,6 +511,12 @@ public class FrmContrato extends javax.swing.JInternalFrame {
 
         jLabel2.setText("CONTRATOS");
 
+        txt_buscar_contrato.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_contratoKeyReleased(evt);
+            }
+        });
+
         tbl_contrato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -300,9 +528,19 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 "ID", "EMPLEADO", "ROL", "AREA", "FECHA INI.", "FECHA FIN", "ESTADO", "SUELDO"
             }
         ));
+        tbl_contrato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_contratoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_contrato);
 
         btn_salir_contrato.setText("SALIR");
+        btn_salir_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_contratoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -313,24 +551,24 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addGap(524, 524, 524))
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btn_salir_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(TabPanel_Contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
+                        .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(30, 30, 30)
                                 .addComponent(txt_buscar_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,17 +581,150 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                             .addComponent(txt_buscar_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_salir_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))))
+                        .addGap(10, 10, 10))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_grabar_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_contratoActionPerformed
-        // TODO add your handling code here:
+        if(this.valida() == true){
+        
+            if(this.btn_grabar_contrato.getText().equals("Grabar")){
+                Contrato contrato = new Contrato();
+
+                contrato.setContratoID(Integer.parseInt(this.txt_id_contrato.getText()));
+                contrato.setEmpleadoID(Integer.parseInt(this.txt_empleado_id_contrato.getText()));
+
+                contrato.setRolID(this.rolDao.devIDRol(this.cmb_rol_contrato.getSelectedItem().toString()));
+                contrato.setAreaID(this.areaDao.devIDArea(this.cmb_area_contrato.getSelectedItem().toString()));
+                
+                contrato.setFechaIni(this.txt_fecha_inicio_contrato.getText());
+                contrato.setFechaFin(this.txt_fecha_fin_contrato.getText());
+
+                if(this.cmb_estado_contrato.getSelectedItem().equals("Activo")){
+                    contrato.setEstado(1);
+                }else{
+                    contrato.setEstado(0);
+                }
+
+                contrato.setSueldo(Double.parseDouble(this.txt_sueldo_contrato.getText()));
+
+                this.contratoDao.insertaContrato(contrato);
+                this.limpia();
+                this.llenaTblContratos(false, "");
+            }else{
+                
+                Contrato contrato = new Contrato();
+                contrato.setContratoID(Integer.parseInt(this.txt_id_contrato.getText()));
+                contrato.setEmpleadoID(Integer.parseInt(this.txt_empleado_id_contrato.getText()));
+
+                contrato.setRolID(this.rolDao.devIDRol(this.cmb_rol_contrato.getSelectedItem().toString()));
+                contrato.setAreaID(this.areaDao.devIDArea(this.cmb_area_contrato.getSelectedItem().toString()));
+                
+                contrato.setFechaIni(this.txt_fecha_inicio_contrato.getText());
+                contrato.setFechaFin(this.txt_fecha_fin_contrato.getText());
+
+                if(this.cmb_estado_contrato.getSelectedItem().equals("Activo")){
+                    contrato.setEstado(1);
+                }else{
+                    contrato.setEstado(0);
+                }
+                contrato.setSueldo(Double.parseDouble(this.txt_sueldo_contrato.getText()));
+                
+                this.contratoDao.actualizarContrato(contrato);
+                this.llenaTblContratos(false, "");
+                this.limpia();
+            
+            }
+            this.btn_grabar_contrato.setText("Grabar");
+            this.TabPanel_Contrato.setEnabledAt(1, true);
+            this.llenaTblEmpleado(false, "");
+            this.llenaTblEmpleadoSinContrato(false, "");
+        }
     }//GEN-LAST:event_btn_grabar_contratoActionPerformed
+
+    private void btn_salir_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_contratoActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_contratoActionPerformed
+
+    private void txt_busca_empgeneral_contratoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_busca_empgeneral_contratoKeyReleased
+        if(this.txt_busca_empgeneral_contrato.getText().isEmpty()){
+            this.llenaTblEmpleado(false,"");
+        }else{
+            this.llenaTblEmpleado(true,this.txt_busca_empgeneral_contrato.getText());
+        }
+    }//GEN-LAST:event_txt_busca_empgeneral_contratoKeyReleased
+
+    private void txt_buscar_emp_sin_contratoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_emp_sin_contratoKeyReleased
+        if(this.txt_buscar_emp_sin_contrato.getText().isEmpty()){
+            this.llenaTblEmpleadoSinContrato(false,"");
+        }else{
+            this.llenaTblEmpleadoSinContrato(true,this.txt_buscar_emp_sin_contrato.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_emp_sin_contratoKeyReleased
+
+    private void txt_buscar_contratoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_contratoKeyReleased
+        if(this.txt_buscar_contrato.getText().isEmpty()){
+            this.llenaTblContratos(false,"");
+        }else{
+            this.llenaTblContratos(true,this.txt_buscar_contrato.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_contratoKeyReleased
+
+    private void tbl_emp_sin_contratoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_emp_sin_contratoMouseClicked
+        int posiFilEmpSinCon = this.tbl_emp_sin_contrato.getSelectedRow();
+        
+        idEmpleado = (int) this.tbl_emp_sin_contrato.getValueAt(posiFilEmpSinCon, 0);
+        this.TabPanel_Contrato.setEnabledAt(2, true);
+        
+        this.TabPanel_Contrato.setSelectedIndex(2);
+        
+        this.txt_id_contrato.setText(Integer.toString(u.idNext("Contrato", "contratoID")));
+        this.txt_empleado_id_contrato.setText(Integer.toString(idEmpleado));
+        this.TabPanel_Contrato.setEnabledAt(1, false);
+    }//GEN-LAST:event_tbl_emp_sin_contratoMouseClicked
+
+    private void tbl_contratoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_contratoMouseClicked
+        this.TabPanel_Contrato.setEnabledAt(2, true);
+        this.TabPanel_Contrato.setSelectedIndex(2);
+        int idx = this.tbl_contrato.getSelectedRow();
+        
+        this.txt_id_contrato.setText(this.dtmContratos.getValueAt(idx, 0).toString());
+        this.txt_empleado_id_contrato.setText(this.dtmContratos.getValueAt(idx, 1).toString());
+        this.cmb_rol_contrato.setSelectedItem(this.dtmContratos.getValueAt(idx, 2).toString());
+        this.cmb_area_contrato.setSelectedItem(this.dtmContratos.getValueAt(idx, 3).toString());
+        this.txt_fecha_inicio_contrato.setText(this.dtmContratos.getValueAt(idx, 4).toString());
+        this.txt_fecha_fin_contrato.setText(this.dtmContratos.getValueAt(idx, 5).toString());
+        this.cmb_estado_contrato.setSelectedItem(this.dtmContratos.getValueAt(idx, 6).toString());
+        this.txt_sueldo_contrato.setText(this.dtmContratos.getValueAt(idx, 7).toString());
+        
+        this.TabPanel_Contrato.setEnabledAt(1, false);
+        this.btn_grabar_contrato.setText("Actualizar");
+    }//GEN-LAST:event_tbl_contratoMouseClicked
+
+    private void btn_eliminar_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_contratoActionPerformed
+        if(this.valida()== true){
+        
+            Contrato contrato = new Contrato();
+            
+            contrato.setContratoID(Integer.parseInt(this.txt_id_contrato.getText()));
+        
+            this.contratoDao.eliminarContrato(contrato);
+            
+            this.llenaTblContratos(false, "");
+            this.llenaTblEmpleado(false, "");
+            this.llenaTblEmpleadoSinContrato(false, "");
+            this.limpia();
+        
+        }
+    }//GEN-LAST:event_btn_eliminar_contratoActionPerformed
+
+    private void btn_volver_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_volver_contratoActionPerformed
+        this.limpia();
+    }//GEN-LAST:event_btn_volver_contratoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPanel_Contrato;

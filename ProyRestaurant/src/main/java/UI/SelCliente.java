@@ -1,20 +1,36 @@
 
 package UI;
 
-public class SelCliente extends javax.swing.JDialog {
+import BEAN.Cliente;
+import DAO.ClienteDao;
+import java.util.Vector;
+import javax.swing.JDialog;
+import javax.swing.table.DefaultTableModel;
 
+public class SelCliente extends javax.swing.JDialog {
+    ClienteDao clieDao;
+    DefaultTableModel dtm;
+    Cliente clie;
     public SelCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        clieDao = new ClienteDao();
+        clie = new Cliente();
+        this.setLocationRelativeTo(parent);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dtm = (DefaultTableModel)this.tbl_cliente_selCliente.getModel();
+        llenaTblClientes(false, "");
     }
-
+    public Cliente devuelveCliente(){
+        return clie;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txt_buscar_cliente = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_cliente_selCliente = new javax.swing.JTable();
 
@@ -24,6 +40,12 @@ public class SelCliente extends javax.swing.JDialog {
         jLabel1.setText("BUSCAR CLIENTE");
 
         jLabel2.setText("CLIENTE");
+
+        txt_buscar_cliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_clienteKeyReleased(evt);
+            }
+        });
 
         tbl_cliente_selCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -36,6 +58,11 @@ public class SelCliente extends javax.swing.JDialog {
                 "ID", "Nombres", "Apellidos", "Direccion", "Telefono", "Estado"
             }
         ));
+        tbl_cliente_selCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_cliente_selClienteMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_cliente_selCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -49,7 +76,7 @@ public class SelCliente extends javax.swing.JDialog {
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_buscar_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
@@ -64,7 +91,7 @@ public class SelCliente extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_buscar_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(30, Short.MAX_VALUE))
@@ -73,11 +100,48 @@ public class SelCliente extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txt_buscar_clienteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_clienteKeyReleased
+        if(this.txt_buscar_cliente.getText().isEmpty()){
+            this.llenaTblClientes(false, "");
+        }else{
+            this.llenaTblClientes(true, this.txt_buscar_cliente.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_clienteKeyReleased
+
+    private void tbl_cliente_selClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_cliente_selClienteMouseClicked
+        int idx;
+        idx = this.tbl_cliente_selCliente.getSelectedRow();
+        
+        clie.setClienteID(Integer.parseInt(dtm.getValueAt(idx, 0).toString()));
+        clie.setApellidos(dtm.getValueAt(idx, 1).toString());
+        clie.setNombres(dtm.getValueAt(idx, 2).toString());
+        clie.setDireccion(dtm.getValueAt(idx, 3).toString());
+        clie.setTelefono(Integer.parseInt(dtm.getValueAt(idx, 4).toString()));
+        clie.setEstado(Integer.parseInt(dtm.getValueAt(idx, 5).toString()));
+        
+        this.dispose();
+    }//GEN-LAST:event_tbl_cliente_selClienteMouseClicked
+    private void llenaTblClientes(boolean sw, String cad){
+        Vector<Cliente> listaClie;
+        listaClie = this.clieDao.ListaCliente(sw, cad);
+        dtm.setRowCount(0);
+        for(int i=0;i<listaClie.size();i++){
+            Vector vec = new Vector();
+            vec.addElement(listaClie.get(i).getClienteID());
+            vec.addElement(listaClie.get(i).getApellidos());
+            vec.addElement(listaClie.get(i).getNombres());
+            vec.addElement(listaClie.get(i).getDireccion());
+            vec.addElement(listaClie.get(i).getTelefono());
+            vec.addElement(listaClie.get(i).getEstado());
+            
+            dtm.addRow(vec);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tbl_cliente_selCliente;
+    private javax.swing.JTextField txt_buscar_cliente;
     // End of variables declaration//GEN-END:variables
 }

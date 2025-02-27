@@ -1,12 +1,61 @@
 
 package UI;
 
-public class FrmRol extends javax.swing.JInternalFrame {
+import BEAN.Rol;
+import DAO.RolDao;
+import UTIL.Util;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
+public class FrmRol extends javax.swing.JInternalFrame {
+    DefaultTableModel dtmRol;
+    RolDao rolDao = new RolDao();
+    Util u = new Util();
     public FrmRol() {
         initComponents();
+        dtmRol = (DefaultTableModel) this.tbl_rol.getModel();
+        this.llenaTblRol(false, "");
     }
-
+    private void llenaTblRol(boolean valida, String cadena){
+        Vector<Rol> listaRol;
+        
+        this.txt_id_rol.setText(Integer.toString(u.idNext("Rol", "rolID")));
+        listaRol = rolDao.listaRol(valida, cadena);
+        dtmRol.setRowCount(0);
+        
+        for(int i=0;i<listaRol.size();i++){
+            
+            Vector vector = new Vector();
+            vector.addElement(listaRol.get(i).getRolID());
+            vector.addElement(listaRol.get(i).getDescripRol());
+            
+            dtmRol.addRow(vector);
+        }
+    }
+    private boolean valida(){
+    
+        if (this.txt_id_rol.getText().isEmpty() && this.txt_descripcion_rol.getText().isEmpty()){
+        
+            JOptionPane.showMessageDialog(null, "Falta llenar campos...");
+        }else if(this.txt_id_rol.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Falta llenar rol ID...");
+        }else if(this.txt_descripcion_rol.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Falta llenar Descripción...");
+        }else {
+            return true;
+        }
+        
+        return false;
+    
+    }
+    
+    private void limpia(){
+    
+        this.txt_descripcion_rol.setText("");
+        
+        this.btn_grabar_rol.setText("Grabar");
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -25,7 +74,7 @@ public class FrmRol extends javax.swing.JInternalFrame {
         btn_limpiar_rol = new javax.swing.JButton();
         btn_salir_rol = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("FORMULARIO ROL");
@@ -43,19 +92,50 @@ public class FrmRol extends javax.swing.JInternalFrame {
                 "ID", "DESCRIPCION"
             }
         ));
+        tbl_rol.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_rolMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_rol);
 
         jLabel3.setText("DESCRIPCION");
 
         jLabel4.setText("Buscar");
 
+        txt_buscar_rol.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_rolKeyReleased(evt);
+            }
+        });
+
         btn_grabar_rol.setText("Grabar");
+        btn_grabar_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_grabar_rolActionPerformed(evt);
+            }
+        });
 
         btn_eliminar_rol.setText("Eliminar");
+        btn_eliminar_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_rolActionPerformed(evt);
+            }
+        });
 
         btn_limpiar_rol.setText("Limpiar");
+        btn_limpiar_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_rolActionPerformed(evt);
+            }
+        });
 
         btn_salir_rol.setText("Salir");
+        btn_salir_rol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_rolActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,6 +211,64 @@ public class FrmRol extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_buscar_rolKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_rolKeyReleased
+        if(this.txt_buscar_rol.getText().isEmpty()){
+            this.llenaTblRol(false, "");
+        }else{
+            this.llenaTblRol(true, this.txt_buscar_rol.getText());
+        }
+    }//GEN-LAST:event_txt_buscar_rolKeyReleased
+
+    private void tbl_rolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_rolMouseClicked
+        int idx = this.tbl_rol.getSelectedRow();
+        
+        this.txt_id_rol.setText(this.dtmRol.getValueAt(idx, 0).toString());
+        this.txt_descripcion_rol.setText(this.dtmRol.getValueAt(idx, 1).toString());
+        
+        this.btn_grabar_rol.setText("Actualizar");
+    }//GEN-LAST:event_tbl_rolMouseClicked
+
+    private void btn_salir_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_rolActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_rolActionPerformed
+
+    private void btn_grabar_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_rolActionPerformed
+        Rol rol = new Rol();
+        if(this.valida() == true){
+            
+            if(this.btn_grabar_rol.getText().equals("Grabar")){
+                rol.setRolID(Integer.parseInt(this.txt_id_rol.getText()));
+                rol.setDescripRol(this.txt_descripcion_rol.getText());
+                
+                this.rolDao.insertaRol(rol);
+                this.limpia();
+                this.llenaTblRol(false, "");
+            }else{
+            
+                rol.setRolID(Integer.parseInt(this.txt_id_rol.getText()));
+                rol.setDescripRol(this.txt_descripcion_rol.getText());
+                
+                this.rolDao.actualizarRol(rol);
+                this.limpia();
+                this.llenaTblRol(false, "");
+            }
+        
+        }
+    }//GEN-LAST:event_btn_grabar_rolActionPerformed
+
+    private void btn_limpiar_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_rolActionPerformed
+        this.limpia();
+        this.llenaTblRol(false, "");
+    }//GEN-LAST:event_btn_limpiar_rolActionPerformed
+
+    private void btn_eliminar_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_rolActionPerformed
+        Rol rol = new Rol();
+        rol.setRolID(Integer.parseInt(this.txt_id_rol.getText()));
+        this.rolDao.eliminarRol(rol);
+        this.limpia();
+        this.llenaTblRol(false, "");
+    }//GEN-LAST:event_btn_eliminar_rolActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_eliminar_rol;

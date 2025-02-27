@@ -72,6 +72,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_insumo_buscarInsumos">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_insumo_buscarInsumosKeyReleased"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -91,6 +94,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_insumos_selInsumosMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

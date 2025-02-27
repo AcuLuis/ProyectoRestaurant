@@ -1,13 +1,41 @@
 
 package UI;
 
-public class SelfProducto extends javax.swing.JDialog {
+import BEAN.Producto;
+import DAO.ProductoDao;
+import java.util.Vector;
+import javax.swing.JDialog;
+import javax.swing.table.DefaultTableModel;
 
-    public SelfProducto(java.awt.Frame parent, boolean modal) {
+public class SelProducto extends javax.swing.JDialog {
+    ProductoDao productoDao;
+    DefaultTableModel dtm;
+    Producto prod;
+    public SelProducto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(parent);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        productoDao = new ProductoDao();
+        prod = new Producto();
+        dtm =(DefaultTableModel)this.tbl_producto_buscarProducto.getModel();
+        this.llenaTblProducto(false, "");
     }
-
+    public void llenaTblProducto(boolean sw, String cad){
+        Vector<Producto> listProducto = productoDao.ListaProducto(sw, cad);
+        dtm.setRowCount(0);
+        for(int i = 0; i<listProducto.size();i++){
+            Vector vec = new Vector();
+            vec.addElement(listProducto.get(i).getProductoID());
+            vec.addElement(listProducto.get(i).getDescripProducto());
+            vec.addElement(listProducto.get(i).getIdtipo());
+            vec.addElement(listProducto.get(i).getPrecioUnit());
+            dtm.addRow(vec);
+        }  
+    }
+    public Producto devProd(){
+        return prod;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -25,6 +53,12 @@ public class SelfProducto extends javax.swing.JDialog {
 
         jLabel2.setText("PRODUCTO");
 
+        txt_producto_buscarProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_producto_buscarProductoKeyReleased(evt);
+            }
+        });
+
         tbl_producto_buscarProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -36,6 +70,14 @@ public class SelfProducto extends javax.swing.JDialog {
                 "ID", "Descripcion", "Tipo", "Precio", "Estado"
             }
         ));
+        tbl_producto_buscarProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_producto_buscarProductoMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tbl_producto_buscarProductoMouseEntered(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_producto_buscarProducto);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -73,6 +115,28 @@ public class SelfProducto extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_producto_buscarProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_producto_buscarProductoKeyReleased
+        if(this.txt_producto_buscarProducto.getText().isEmpty()){
+            this.llenaTblProducto(false, "");
+        }else{
+            this.llenaTblProducto(true, this.txt_producto_buscarProducto.getText());
+        }
+    }//GEN-LAST:event_txt_producto_buscarProductoKeyReleased
+
+    private void tbl_producto_buscarProductoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_producto_buscarProductoMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbl_producto_buscarProductoMouseEntered
+
+    private void tbl_producto_buscarProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_producto_buscarProductoMouseClicked
+        int i;
+        i = this.tbl_producto_buscarProducto.getSelectedRow();
+        prod.setProductoID(Integer.parseInt(dtm.getValueAt(i,0).toString()));
+        prod.setDescripProducto(dtm.getValueAt(i,1).toString());
+        prod.setIdtipo(Integer.parseInt(dtm.getValueAt(i,2).toString()));
+        prod.setPrecioUnit(Double.parseDouble(dtm.getValueAt(i,3).toString()));
+        this.dispose();
+    }//GEN-LAST:event_tbl_producto_buscarProductoMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

@@ -1,13 +1,103 @@
 
 package UI;
 
+import BEAN.Plato;
+import BEAN.Producto;
+import BEAN.TipProducto;
+import DAO.PlatoDao;
+import DAO.ProductoDao;
+import DAO.TipProductoDao;
+import UTIL.Util;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 
 public class FrmProducto extends javax.swing.JInternalFrame {
-
+    PlatoDao platDao;
+    ProductoDao prodDao;
+    TipProductoDao tipProbDao;
+    DefaultTableModel dtm;
+    private int idProducto;
+    
     public FrmProducto() {
+        platDao = new PlatoDao();
+        prodDao = new ProductoDao();
+        tipProbDao = new TipProductoDao();
         initComponents();
+        dtm = (DefaultTableModel)this.tbl_producto.getModel();
+        llenaTblProducto(false,"");
+        llenaCmbPlato();
+        llenaCmbTipo(); 
     }
-
+    private void llenaCmbTipo(){
+        Vector<TipProducto>listaTip;
+        listaTip = tipProbDao.listaTip();
+        this.cmb_tipoProducto_producto.addItem("");
+        for(int i=0;i<listaTip.size();i++){
+            this.cmb_tipoProducto_producto.addItem(listaTip.get(i).getDescripcion());
+        }
+    }
+    private void llenaCmbPlato(){
+        Vector <Plato> listaPlato;
+        listaPlato = platDao.listaPlato();
+        this.cmb_plato_producto.addItem("");
+        for(int i=0;i<listaPlato.size();i++){
+            this.cmb_plato_producto.addItem(listaPlato.get(i).getDescPlat());
+        }
+    }
+    private void llenaTblProducto(boolean valida, String Cadena){
+        
+        Vector<Producto> listProduct;
+        
+        listProduct = prodDao.ListaProducto(valida, Cadena);
+        dtm.setRowCount(0);
+        
+        for(int i=0; i<listProduct.size();i++){
+            Vector v = new Vector();
+            v.addElement(listProduct.get(i).getProductoID());
+            v.addElement(listProduct.get(i).getDescripProducto());
+            v.addElement(listProduct.get(i).getCantidad());
+            v.addElement(listProduct.get(i).getPrecioUnit());
+            v.addElement(listProduct.get(i).getIdplato());
+            v.addElement(listProduct.get(i).getIdtipo());
+            dtm.addRow(v);
+        }
+    }
+    private boolean verificaCamposLlenos(){
+        boolean valida = false;
+        if(this.txt_descripcion_producto.getText().isEmpty() && this.txt_cantidad_producto.getText().isEmpty()
+           && this.txt_precioUnitario_producto.getText().isEmpty() && this.cmb_plato_producto.getSelectedItem().toString().isEmpty()
+           && this.cmb_tipoProducto_producto.getSelectedItem().toString().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR TODOS LOS CAMPOS...");
+        }else{
+            if(this.txt_descripcion_producto.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR LA DESCRIPCION DEL PRODUCTO...");
+            }else if(this.txt_cantidad_producto.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR LA CANTIDAD...");
+            }else if(this.txt_precioUnitario_producto.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR EL PRECIO UNITARIO...");
+            }
+            else if(this.cmb_plato_producto.getSelectedItem().toString().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR EL TIPO DE PLATO...");
+            }
+            else if(this.cmb_tipoProducto_producto.getSelectedItem().toString().isEmpty()){
+            JOptionPane.showMessageDialog(this, "FALTA LLENAR EL TIPO DE PRODUCTO...");
+            }else{
+                valida = true;
+            }
+        }
+        return valida;
+    } 
+    
+    private void limpiar(){
+        this.txt_id_producto.setText("");
+        this.txt_descripcion_producto.setText("");
+        this.txt_cantidad_producto.setText("");
+        this.txt_precioUnitario_producto.setText("");
+        this.cmb_plato_producto.setSelectedItem("");
+        this.cmb_tipoProducto_producto.setSelectedItem("");
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -28,13 +118,13 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         txt_buscar_producto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_producto = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btn_grabar_producto = new javax.swing.JButton();
+        btn_eliminar_producto = new javax.swing.JButton();
+        btn_limpiar_producto = new javax.swing.JButton();
         btn_salir_producto = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID");
 
@@ -50,6 +140,12 @@ public class FrmProducto extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Buscar");
 
+        txt_buscar_producto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_buscar_productoKeyReleased(evt);
+            }
+        });
+
         tbl_producto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -61,15 +157,40 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 "ID", "Descripcion", "Cantidad", "Precio unitario", "Plato", "Tipo Producto"
             }
         ));
+        tbl_producto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_productoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_producto);
 
-        jButton1.setText("Grabar");
+        btn_grabar_producto.setText("Grabar");
+        btn_grabar_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_grabar_productoActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Eliminar");
+        btn_eliminar_producto.setText("Eliminar");
+        btn_eliminar_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_eliminar_productoActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Limpiar");
+        btn_limpiar_producto.setText("Limpiar");
+        btn_limpiar_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_limpiar_productoActionPerformed(evt);
+            }
+        });
 
         btn_salir_producto.setText("Salir");
+        btn_salir_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_productoActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel8.setText("FORMULARIO PRODUCTO");
@@ -80,11 +201,11 @@ public class FrmProducto extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addComponent(jButton1)
+                .addComponent(btn_grabar_producto)
                 .addGap(44, 44, 44)
-                .addComponent(jButton2)
+                .addComponent(btn_eliminar_producto)
                 .addGap(37, 37, 37)
-                .addComponent(jButton3)
+                .addComponent(btn_limpiar_producto)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(26, 26, 26)
@@ -167,9 +288,9 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btn_grabar_producto)
+                    .addComponent(btn_eliminar_producto)
+                    .addComponent(btn_limpiar_producto))
                 .addGap(26, 26, 26)
                 .addComponent(btn_salir_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
@@ -178,13 +299,126 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_salir_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_productoActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_productoActionPerformed
+
+    private void btn_limpiar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiar_productoActionPerformed
+        limpiar();
+    }//GEN-LAST:event_btn_limpiar_productoActionPerformed
+
+    private void txt_buscar_productoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscar_productoKeyReleased
+        if(this.txt_buscar_producto.getText().isEmpty()){
+            llenaTblProducto(false,"");
+        }else{
+            llenaTblProducto(true,this.txt_buscar_producto.getText());
+        } 
+    }//GEN-LAST:event_txt_buscar_productoKeyReleased
+
+    private void tbl_productoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_productoMouseClicked
+        int idx;
+        idx = this.tbl_producto.getSelectedRow();
+        this.idProducto = Integer.parseInt(dtm.getValueAt(idx, 0).toString());
+        this.txt_id_producto.setText(dtm.getValueAt(idx, 0).toString());
+        this.txt_descripcion_producto.setText(dtm.getValueAt(idx, 1).toString());
+        this.txt_cantidad_producto.setText(dtm.getValueAt(idx, 2).toString());
+        this.txt_precioUnitario_producto.setText(dtm.getValueAt(idx, 3).toString());
+        if(dtm.getValueAt(idx, 4).equals(10)){
+            this.cmb_plato_producto.setSelectedItem("Fondo");
+        }else if (dtm.getValueAt(idx, 4).equals(11)){
+            this.cmb_plato_producto.setSelectedItem("Entrada");
+        }else{
+            this.cmb_plato_producto.setSelectedItem("Postre");
+        }
+
+        if(dtm.getValueAt(idx, 5).equals(1)){
+            this.cmb_tipoProducto_producto.setSelectedItem("perecible");
+        }else{
+            this.cmb_tipoProducto_producto.setSelectedItem("No perecible");
+        }
+
+        this.btn_grabar_producto.setText("Actualizar");
+    }//GEN-LAST:event_tbl_productoMouseClicked
+
+    private void btn_eliminar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminar_productoActionPerformed
+        if (this.verificaCamposLlenos() == true){
+            Producto prod = new Producto();
+        
+            prod.setProductoID(this.idProducto);
+            this.prodDao.eliminarProducto(prod);
+        }
+        this.llenaTblProducto(false, "");
+        this.limpiar();
+        this.btn_grabar_producto.setText("GRABAR"); 
+    }//GEN-LAST:event_btn_eliminar_productoActionPerformed
+
+    private void btn_grabar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_productoActionPerformed
+        if(this.verificaCamposLlenos()== true){
+            Producto prod = new Producto();
+            Util util = new Util();
+
+            if(this.btn_grabar_producto.getText().equals("Grabar")){
+                idProducto = util.idNext("producto","productoID");
+
+                prod.setProductoID(idProducto);
+
+                if (this.cmb_plato_producto.getSelectedItem().equals("entrada")){
+                    prod.setIdplato(30);
+                }else if(this.cmb_plato_producto.getSelectedItem().equals("menú")){
+
+                    prod.setIdplato(31);
+                }else if(this.cmb_plato_producto.getSelectedItem().equals("sopa")){
+
+                    prod.setIdplato(32);
+                }
+
+                if(this.cmb_tipoProducto_producto.getSelectedItem().equals("envasado")){
+                    prod.setIdtipo(40);
+                }else{
+                    prod.setIdtipo(41);
+                }
+                prod.setDescripProducto(this.txt_descripcion_producto.getText());
+                prod.setCantidad(Integer.parseInt(this.txt_cantidad_producto.getText()));
+                prod.setPrecioUnit(Double.parseDouble(this.txt_precioUnitario_producto.getText()));
+
+                this.prodDao.insertaProducto(prod);
+            }else{
+                prod.setProductoID(Integer.parseInt(this.txt_id_producto.getText()));
+                if (this.cmb_plato_producto.getSelectedItem().equals("entrada")){
+                    prod.setIdplato(30    );
+                }else if(this.cmb_plato_producto.getSelectedItem().equals("menú")){
+
+                    prod.setIdplato(31);
+                }else if(this.cmb_plato_producto.getSelectedItem().equals("sopa")){
+
+                    prod.setIdplato(32);
+                }
+
+                if(this.cmb_tipoProducto_producto.getSelectedItem().equals("envasado")){
+                    prod.setIdtipo(40);
+                }else{
+                    prod.setIdtipo(41);
+                }
+
+                prod.setDescripProducto(this.txt_descripcion_producto.getText());
+                prod.setCantidad(Integer.parseInt(this.txt_cantidad_producto.getText()));
+                prod.setPrecioUnit(Double.parseDouble(this.txt_precioUnitario_producto.getText()));
+
+                this.prodDao.actualizarProducto(prod);
+                this.btn_grabar_producto.setText("Grabar");
+            }
+            this.llenaTblProducto(false,"");
+            this.limpiar();
+        }
+    }//GEN-LAST:event_btn_grabar_productoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_eliminar_producto;
+    private javax.swing.JButton btn_grabar_producto;
+    private javax.swing.JButton btn_limpiar_producto;
     private javax.swing.JButton btn_salir_producto;
     private javax.swing.JComboBox<String> cmb_plato_producto;
     private javax.swing.JComboBox<String> cmb_tipoProducto_producto;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

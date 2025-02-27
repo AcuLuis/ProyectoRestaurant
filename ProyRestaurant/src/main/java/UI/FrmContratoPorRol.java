@@ -1,12 +1,33 @@
 
 package UI;
 
-public class FrmContratoPorRol extends javax.swing.JInternalFrame {
+import BEAN.Rol;
+import DAO.RolDao;
+import UTIL.DbBean;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Vector;
+import net.sf.jasperreports.engine.JRException;
 
+public class FrmContratoPorRol extends javax.swing.JInternalFrame {
+    RolDao rolDao = new RolDao();
     public FrmContratoPorRol() {
         initComponents();
+        this.llenaCmbRol();
     }
-
+    private void llenaCmbRol(){
+    
+        Vector<Rol> listaRol = new Vector<Rol>();
+        
+        this.cmb_rol_contratoxrol.addItem("");
+        listaRol = rolDao.llenaRol();
+        
+        for(int i=0; i<listaRol.size();i++){
+        
+            this.cmb_rol_contratoxrol.addItem(listaRol.get(i).getDescripRol());
+        }
+        
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -17,7 +38,7 @@ public class FrmContratoPorRol extends javax.swing.JInternalFrame {
         btn_producirReporte_contratoxrol = new javax.swing.JButton();
         btn_salir_contratoxrol = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("REPORTE CONTRATO POR ROL");
@@ -25,8 +46,18 @@ public class FrmContratoPorRol extends javax.swing.JInternalFrame {
         jLabel2.setText("Rol");
 
         btn_producirReporte_contratoxrol.setText("Producir Reporte");
+        btn_producirReporte_contratoxrol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_producirReporte_contratoxrolActionPerformed(evt);
+            }
+        });
 
         btn_salir_contratoxrol.setText("SALIR");
+        btn_salir_contratoxrol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_contratoxrolActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -35,11 +66,11 @@ public class FrmContratoPorRol extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(115, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel2)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(115, 115, 115)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(115, 115, 115))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(cmb_rol_contratoxrol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -67,6 +98,34 @@ public class FrmContratoPorRol extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_salir_contratoxrolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_contratoxrolActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_contratoxrolActionPerformed
+
+    private void btn_producirReporte_contratoxrolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_producirReporte_contratoxrolActionPerformed
+        String seleccionRol;
+        
+        seleccionRol = this.cmb_rol_contratoxrol.getSelectedItem().toString();
+        
+        HashMap map = new HashMap();
+        
+        map.put("Descripcion", seleccionRol);
+        
+        try{
+        
+            String r = "src/REPORTES/repContratoPorRol.jasper";
+            DbBean db = new DbBean();
+            db.connectRep(r, map, true);
+        }catch(SQLException e){
+        
+            e.printStackTrace();
+        }catch(JRException ex){
+        
+            ex.printStackTrace();
+        }
+        this.dispose();
+    }//GEN-LAST:event_btn_producirReporte_contratoxrolActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_producirReporte_contratoxrol;
