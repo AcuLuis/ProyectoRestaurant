@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 public class LocalDao {
-        public Vector<LocalR> listaLocal(){
+    public Vector<LocalR> listaLocal(){
     
         String sql;
         Vector<LocalR> listaLocal = new Vector<LocalR>();
@@ -33,5 +33,5 @@ public class LocalDao {
             e.printStackTrace();
         }
         return listaLocal;
-    }
+    }      
 }

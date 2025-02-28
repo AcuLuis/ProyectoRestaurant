@@ -18,14 +18,22 @@ public class FrmProducto extends javax.swing.JInternalFrame {
     ProductoDao prodDao;
     TipProductoDao tipProbDao;
     DefaultTableModel dtm;
+    Util u;
     private int idProducto;
     
     public FrmProducto() {
         platDao = new PlatoDao();
         prodDao = new ProductoDao();
         tipProbDao = new TipProductoDao();
+        u = new Util();
         initComponents();
-        dtm = (DefaultTableModel)this.tbl_producto.getModel();
+        dtm = new DefaultTableModel(new Object[]{"ID", "Descripcion", "Cantidad", "Precio Unitario", "Plato", "Tipo Producto"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        this.tbl_producto.setModel(dtm);
         llenaTblProducto(false,"");
         llenaCmbPlato();
         llenaCmbTipo(); 
@@ -97,6 +105,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         this.txt_precioUnitario_producto.setText("");
         this.cmb_plato_producto.setSelectedItem("");
         this.cmb_tipoProducto_producto.setSelectedItem("");
+        this.txt_id_producto.setText(Integer.toString(u.idNext("Producto", "productoID")));
+        this.btn_grabar_producto.setText("Grabar");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -127,6 +137,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID");
+
+        txt_id_producto.setEditable(false);
 
         jLabel2.setText("Descripcion");
 
@@ -199,62 +211,59 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(btn_grabar_producto)
-                .addGap(44, 44, 44)
-                .addComponent(btn_eliminar_producto)
-                .addGap(37, 37, 37)
-                .addComponent(btn_limpiar_producto)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel8)
-                            .addGap(254, 254, 254))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(44, 44, 44)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txt_precioUnitario_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cmb_plato_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cmb_tipoProducto_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txt_descripcion_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txt_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txt_cantidad_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGap(94, 94, 94)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel7)
-                                    .addGap(30, 30, 30)
-                                    .addComponent(txt_buscar_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
-                                    .addGap(32, 32, 32)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btn_grabar_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_eliminar_producto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_limpiar_producto))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txt_descripcion_producto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_cantidad_producto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_precioUnitario_producto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cmb_plato_producto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cmb_tipoProducto_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_id_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(30, 30, 30)
+                                .addComponent(txt_buscar_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                                .addGap(32, 32, 32))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btn_salir_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32))))
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(326, 326, 326))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -291,7 +300,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                     .addComponent(btn_grabar_producto)
                     .addComponent(btn_eliminar_producto)
                     .addComponent(btn_limpiar_producto))
-                .addGap(26, 26, 26)
+                .addGap(10, 10, 10)
                 .addComponent(btn_salir_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
@@ -323,20 +332,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         this.txt_descripcion_producto.setText(dtm.getValueAt(idx, 1).toString());
         this.txt_cantidad_producto.setText(dtm.getValueAt(idx, 2).toString());
         this.txt_precioUnitario_producto.setText(dtm.getValueAt(idx, 3).toString());
-        if(dtm.getValueAt(idx, 4).equals(10)){
-            this.cmb_plato_producto.setSelectedItem("Fondo");
-        }else if (dtm.getValueAt(idx, 4).equals(11)){
-            this.cmb_plato_producto.setSelectedItem("Entrada");
-        }else{
-            this.cmb_plato_producto.setSelectedItem("Postre");
-        }
-
-        if(dtm.getValueAt(idx, 5).equals(1)){
-            this.cmb_tipoProducto_producto.setSelectedItem("perecible");
-        }else{
-            this.cmb_tipoProducto_producto.setSelectedItem("No perecible");
-        }
-
+        this.cmb_plato_producto.setSelectedItem(u.cadExpNum("Plato", "idPlato", "descPlato", Integer.parseInt(dtm.getValueAt(idx, 4).toString())));
+        this.cmb_tipoProducto_producto.setSelectedItem(u.cadExpNum("TipProducto", "idTipProducto", "descripcion", Integer.parseInt(dtm.getValueAt(idx, 5).toString())));
         this.btn_grabar_producto.setText("Actualizar");
     }//GEN-LAST:event_tbl_productoMouseClicked
 
@@ -349,7 +346,7 @@ public class FrmProducto extends javax.swing.JInternalFrame {
         }
         this.llenaTblProducto(false, "");
         this.limpiar();
-        this.btn_grabar_producto.setText("GRABAR"); 
+        this.btn_grabar_producto.setText("Grabar"); 
     }//GEN-LAST:event_btn_eliminar_productoActionPerformed
 
     private void btn_grabar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_productoActionPerformed
@@ -361,22 +358,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 idProducto = util.idNext("producto","productoID");
 
                 prod.setProductoID(idProducto);
-
-                if (this.cmb_plato_producto.getSelectedItem().equals("entrada")){
-                    prod.setIdplato(30);
-                }else if(this.cmb_plato_producto.getSelectedItem().equals("menú")){
-
-                    prod.setIdplato(31);
-                }else if(this.cmb_plato_producto.getSelectedItem().equals("sopa")){
-
-                    prod.setIdplato(32);
-                }
-
-                if(this.cmb_tipoProducto_producto.getSelectedItem().equals("envasado")){
-                    prod.setIdtipo(40);
-                }else{
-                    prod.setIdtipo(41);
-                }
+                prod.setIdplato(u.idExp("Plato", "idPlato", "descPlato", this.cmb_plato_producto.getSelectedItem().toString()));
+                prod.setIdtipo(u.idExp("TipProducto", "idTipProducto", "descripcion", this.cmb_tipoProducto_producto.getSelectedItem().toString()));
                 prod.setDescripProducto(this.txt_descripcion_producto.getText());
                 prod.setCantidad(Integer.parseInt(this.txt_cantidad_producto.getText()));
                 prod.setPrecioUnit(Double.parseDouble(this.txt_precioUnitario_producto.getText()));
@@ -384,22 +367,8 @@ public class FrmProducto extends javax.swing.JInternalFrame {
                 this.prodDao.insertaProducto(prod);
             }else{
                 prod.setProductoID(Integer.parseInt(this.txt_id_producto.getText()));
-                if (this.cmb_plato_producto.getSelectedItem().equals("entrada")){
-                    prod.setIdplato(30    );
-                }else if(this.cmb_plato_producto.getSelectedItem().equals("menú")){
-
-                    prod.setIdplato(31);
-                }else if(this.cmb_plato_producto.getSelectedItem().equals("sopa")){
-
-                    prod.setIdplato(32);
-                }
-
-                if(this.cmb_tipoProducto_producto.getSelectedItem().equals("envasado")){
-                    prod.setIdtipo(40);
-                }else{
-                    prod.setIdtipo(41);
-                }
-
+                prod.setIdplato(u.idExp("Plato", "idPlato", "descPlato", this.cmb_plato_producto.getSelectedItem().toString()));
+                prod.setIdtipo(u.idExp("TipProducto", "idTipProducto", "descripcion", this.cmb_tipoProducto_producto.getSelectedItem().toString()));
                 prod.setDescripProducto(this.txt_descripcion_producto.getText());
                 prod.setCantidad(Integer.parseInt(this.txt_cantidad_producto.getText()));
                 prod.setPrecioUnit(Double.parseDouble(this.txt_precioUnitario_producto.getText()));

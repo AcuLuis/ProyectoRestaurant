@@ -10,6 +10,9 @@ import DAO.ContratoDao;
 import DAO.EmpleadoDao;
 import DAO.RolDao;
 import UTIL.Util;
+import com.toedter.calendar.JDateChooser;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -23,15 +26,33 @@ public class FrmContrato extends javax.swing.JInternalFrame {
     RolDao rolDao = new RolDao();
     AreaDao areaDao = new AreaDao();
     ContratoDao contratoDao = new ContratoDao();
+    JDateChooser dateChooser = new JDateChooser();
     Util u = new Util();
     
     int idEmpleado = 0;
     public FrmContrato() {
         initComponents();
-        dtmEmpleado = (DefaultTableModel)this.tbl_empgeneral_contrato.getModel();
-        dtmEmpleadoSinContrato = (DefaultTableModel) this.tbl_emp_sin_contrato.getModel();
-        dtmContratos = (DefaultTableModel) this.tbl_contrato.getModel();
-        
+        dtmEmpleado = new DefaultTableModel(new Object []{"ID", "NOMBRE", "APELLIDOS", "FECHA NAC.", "GENERO", "DNI", "ESTADO CIVIL"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        dtmEmpleadoSinContrato = new DefaultTableModel(new Object []{"ID", "NOMBRE", "APELLIDOS", "FECHA NAC.", "GENERO", "DNI", "ESTADO CIVIL"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        dtmContratos = new DefaultTableModel(new Object []{"ID", "EMPLEADO", "ROL", "AREA", "FECHA INI.", "FECHA FIN", "ESTADO", "SUELDO"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        this.tbl_empgeneral_contrato.setModel(dtmEmpleado);
+        this.tbl_emp_sin_contrato.setModel(dtmEmpleadoSinContrato);
+        this.tbl_contrato.setModel(dtmContratos);
         this.llenaTblEmpleado(false, "");
         this.llenaTblEmpleadoSinContrato(false, "");
         this.llenaTblContratos(false, "");
@@ -240,6 +261,7 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         btn_grabar_contrato = new javax.swing.JButton();
         btn_volver_contrato = new javax.swing.JButton();
         btn_eliminar_contrato = new javax.swing.JButton();
+        btn_selecFecha_contrato = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         txt_buscar_contrato = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -270,6 +292,11 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 "ID", "NOMBRE", "APELLIDOS", "FECHA NAC.", "GENERO", "DNI", "ESTADO CIVIL"
             }
         ));
+        tbl_empgeneral_contrato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_empgeneral_contratoMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_empgeneral_contrato);
 
         javax.swing.GroupLayout panel_emp_generalLayout = new javax.swing.GroupLayout(panel_emp_general);
@@ -293,9 +320,9 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 .addGroup(panel_emp_generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txt_busca_empgeneral_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         TabPanel_Contrato.addTab("Empleados General", panel_emp_general);
@@ -347,9 +374,9 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                 .addGroup(panel_emp_sin_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl)
                     .addComponent(txt_buscar_emp_sin_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -379,11 +406,15 @@ public class FrmContrato extends javax.swing.JInternalFrame {
 
         jLabel5.setText("FECHA INICIO");
 
+        txt_fecha_inicio_contrato.setEditable(false);
+
         jLabel6.setText("FECHA FIN");
 
         jLabel7.setText("ESTADO");
 
         jLabel8.setText("SUELDO");
+
+        txt_fecha_fin_contrato.setEditable(false);
 
         jLabel9.setText("DATOS GENERALES");
         jLabel9.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -395,6 +426,10 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         jLabel12.setText("Rol");
 
         jLabel13.setText("Area");
+
+        txt_id_contrato.setEditable(false);
+
+        txt_empleado_id_contrato.setEditable(false);
 
         cmb_rol_contrato.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
         cmb_rol_contrato.setSelectedIndex(-1);
@@ -420,6 +455,13 @@ public class FrmContrato extends javax.swing.JInternalFrame {
             }
         });
 
+        btn_selecFecha_contrato.setText("SELECCIONAR FECHA");
+        btn_selecFecha_contrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_selecFecha_contratoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_contratoLayout = new javax.swing.GroupLayout(panel_contrato);
         panel_contrato.setLayout(panel_contratoLayout);
         panel_contratoLayout.setHorizontalGroup(
@@ -429,16 +471,19 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                     .addGroup(panel_contratoLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_fecha_inicio_contrato)
-                            .addComponent(txt_fecha_fin_contrato)
-                            .addComponent(cmb_estado_contrato, 0, 100, Short.MAX_VALUE)
-                            .addComponent(txt_sueldo_contrato))
+                            .addGroup(panel_contratoLayout.createSequentialGroup()
+                                .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel5))
+                                .addGap(18, 18, 18)
+                                .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_fecha_inicio_contrato)
+                                    .addComponent(txt_fecha_fin_contrato)
+                                    .addComponent(cmb_estado_contrato, 0, 100, Short.MAX_VALUE)
+                                    .addComponent(txt_sueldo_contrato)))
+                            .addComponent(btn_selecFecha_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(64, 64, 64)
                         .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -452,21 +497,22 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                                 .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btn_eliminar_contrato)
                                     .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txt_id_contrato)
-                                        .addComponent(txt_empleado_id_contrato)
                                         .addComponent(cmb_rol_contrato, 0, 150, Short.MAX_VALUE)
-                                        .addComponent(cmb_area_contrato, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                        .addComponent(cmb_area_contrato, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(txt_empleado_id_contrato, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                            .addComponent(txt_id_contrato, javax.swing.GroupLayout.Alignment.LEADING)))))))
                     .addGroup(panel_contratoLayout.createSequentialGroup()
-                        .addGap(76, 76, 76)
+                        .addGap(77, 77, 77)
                         .addComponent(btn_grabar_contrato)
-                        .addGap(76, 76, 76)
+                        .addGap(72, 72, 72)
                         .addComponent(btn_volver_contrato)))
                 .addContainerGap(73, Short.MAX_VALUE))
         );
         panel_contratoLayout.setVerticalGroup(
             panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_contratoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(33, 33, 33)
                 .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panel_contratoLayout.createSequentialGroup()
                         .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -479,32 +525,33 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                             .addComponent(txt_fecha_fin_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11)
                             .addComponent(txt_id_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22)
-                        .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(cmb_estado_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(txt_empleado_id_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_contratoLayout.createSequentialGroup()
                                 .addGap(22, 22, 22)
                                 .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel8)
-                                    .addComponent(txt_sueldo_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel10)
+                                    .addComponent(txt_empleado_id_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_contratoLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12))))
+                                .addComponent(btn_selecFecha_contrato)))
+                        .addGap(22, 22, 22)
+                        .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(cmb_estado_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)))
                     .addComponent(cmb_rol_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGap(20, 20, 20)
                 .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(cmb_area_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                    .addComponent(cmb_area_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_sueldo_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(panel_contratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_grabar_contrato)
-                    .addComponent(btn_volver_contrato)
-                    .addComponent(btn_eliminar_contrato))
-                .addGap(79, 79, 79))
+                    .addComponent(btn_grabar_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_volver_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_eliminar_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49))
         );
 
         TabPanel_Contrato.addTab("Contrato", panel_contrato);
@@ -556,7 +603,7 @@ public class FrmContrato extends javax.swing.JInternalFrame {
                     .addComponent(btn_salir_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(TabPanel_Contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(25, 25, 25)
+                        .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
@@ -568,22 +615,20 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(25, 25, 25)
                 .addComponent(jLabel1)
-                .addGap(48, 48, 48)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(TabPanel_Contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(TabPanel_Contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txt_buscar_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_salir_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_salir_contrato, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -681,7 +726,8 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         this.TabPanel_Contrato.setEnabledAt(2, true);
         
         this.TabPanel_Contrato.setSelectedIndex(2);
-        
+        this.txt_fecha_inicio_contrato.setText(u.obtenerFecha());
+        this.txt_fecha_fin_contrato.setText(u.obtenerFecha());
         this.txt_id_contrato.setText(Integer.toString(u.idNext("Contrato", "contratoID")));
         this.txt_empleado_id_contrato.setText(Integer.toString(idEmpleado));
         this.TabPanel_Contrato.setEnabledAt(1, false);
@@ -726,11 +772,49 @@ public class FrmContrato extends javax.swing.JInternalFrame {
         this.limpia();
     }//GEN-LAST:event_btn_volver_contratoActionPerformed
 
+    private void tbl_empgeneral_contratoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_empgeneral_contratoMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbl_empgeneral_contratoMouseClicked
+
+    private void btn_selecFecha_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selecFecha_contratoActionPerformed
+        // Crear el selector de fecha
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("yyyy-MM-dd"); // Formato de visualización en JDateChooser
+
+        // Mostrarlo dentro de un JOptionPane
+        int opcion = JOptionPane.showConfirmDialog(null, dateChooser, "Seleccione una Fecha", JOptionPane.OK_CANCEL_OPTION);
+
+        if (opcion == JOptionPane.OK_OPTION) {
+            Date fechaSeleccionada = dateChooser.getDate();
+            if (fechaSeleccionada != null) {
+                // Formatear la fecha antes de mostrarla en el JTextField
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormateadaFin = sdf.format(fechaSeleccionada);
+                String fechaInicioTexto = this.txt_fecha_inicio_contrato.getText();
+                 try {
+                    Date fechaInicio = sdf.parse(fechaInicioTexto);
+
+                    if (fechaSeleccionada.compareTo(fechaInicio) >= 0) {
+                        JOptionPane.showMessageDialog(null, "Fecha Seleccionada: "+fechaFormateadaFin);
+                        this.txt_fecha_fin_contrato.setText(fechaFormateadaFin);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "La fecha de fin debe ser igual o posterior a la fecha de inicio.");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error al convertir la fecha de inicio.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se seleccionó ninguna fecha.");
+            }
+        }
+    }//GEN-LAST:event_btn_selecFecha_contratoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPanel_Contrato;
     private javax.swing.JButton btn_eliminar_contrato;
     private javax.swing.JButton btn_grabar_contrato;
     private javax.swing.JButton btn_salir_contrato;
+    private javax.swing.JButton btn_selecFecha_contrato;
     private javax.swing.JButton btn_volver_contrato;
     private javax.swing.JComboBox<String> cmb_area_contrato;
     private javax.swing.JComboBox<String> cmb_estado_contrato;

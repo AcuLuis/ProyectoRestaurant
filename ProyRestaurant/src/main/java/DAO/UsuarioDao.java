@@ -17,6 +17,29 @@ public class UsuarioDao {
     public UsuarioDao() {
     }
     
+    public String consultaContra(int usuarioID, int idLocalR, String usuario, int tipoUsuario, int empleadoID){
+        DbBean con = new DbBean();
+        String pass="";
+        String sql = " select contraseña\n" +
+                     " from Usuario\n" +
+                     " where usuarioID="+usuarioID+" and idLocalR="+idLocalR+" and usuario = '"+usuario+"' and tipoUsuario= "+tipoUsuario+" and empleadoID="+empleadoID+"; ";
+        try{
+            ResultSet resultado = con.resultadoSQL(sql);
+            while(resultado.next()){
+                user.setContrasena(resultado.getString(1));
+            }
+            pass = user.getContrasena();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            con.desconecta();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return pass;
+    }
+    
     public int consulta(String usuario, String contraseña){
         
         DbBean con = new DbBean();
@@ -25,7 +48,7 @@ public class UsuarioDao {
         
         try{
             
-            sql = "select empleadoID  \n";
+            sql = sql + "select empleadoID  \n";
             sql = sql + " from usuario \n";
             sql = sql +" where usuario = '"+usuario+"' and contraseña = '"+contraseña+"' ";
             
@@ -58,7 +81,7 @@ public class UsuarioDao {
         
         try{
             
-            sql = "select COUNT(*) \n";
+            sql = sql+"select COUNT(*) \n";
             sql = sql + " from usuario \n";
             sql = sql +" where usuario = '"+usuario+"' and contraseña = '"+contraseña+"' and idLocalR = '"+localID+"' ";
             
@@ -217,6 +240,7 @@ public class UsuarioDao {
         sql = "update Usuario set ";
         sql = sql+ " idLocalR = "+user.getIdLocalR()+", ";
         sql = sql+ " usuario = '"+user.getUsuario()+"', ";
+        sql = sql+ " contraseña = '"+user.getContrasena()+"', ";
         sql = sql+ " tipoUsuario = "+user.getTipoUsuario()+", ";
         sql = sql+ " empleadoID = "+user.getIdEmpleado()+" ";
         

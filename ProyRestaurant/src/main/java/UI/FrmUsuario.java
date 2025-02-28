@@ -12,7 +12,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class FrmUsuario extends javax.swing.JFrame {
+public class FrmUsuario extends javax.swing.JInternalFrame {
    
     DefaultTableModel dtmUsuario;
     DefaultTableModel dtmEmpleado;
@@ -23,17 +23,35 @@ public class FrmUsuario extends javax.swing.JFrame {
     
     public FrmUsuario() {
         initComponents();
-        dtmUsuario = (DefaultTableModel) this.tbl_usuario.getModel();
-        dtmEmpleado = (DefaultTableModel) this.tbl_empleado_usuario.getModel();
+
+        dtmUsuario = new DefaultTableModel(new Object[]{"ID USUARIO", "LOCAL", "USUARIO", "TIPO USUARIO", "EMPLEADO"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        dtmEmpleado = new DefaultTableModel(new Object[]{"EMPLEADO ID", "NOMBRE", "APELLIDO", "DNI"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tbl_usuario.setModel(dtmUsuario);
+        tbl_empleado_usuario.setModel(dtmEmpleado);
+        
         this.llenaCmbTipoUsuario();
         this.llenaTblUsuario(false, "");
         this.llenaTblEmpleado(false, "");
-        if(this.idEmpleado == 0){
+
+        if (this.idEmpleado == 0) {
             this.panel_usuario.setEnabledAt(1, false);
-        }else if(this.idEmpleado != 0){
+        } else {
             this.panel_usuario.setEnabledAt(1, true);
         }
     }
+
     private void llenaTblUsuario(boolean valida, String cadena){
     
         Vector<Usuario> listaUsuario;
@@ -145,16 +163,14 @@ public class FrmUsuario extends javax.swing.JFrame {
 
         tbl_empleado_usuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "EMPLEADO ID", "NOMBRE", "APELLIDO", "DNI"
             }
         ));
-        tbl_empleado_usuario.setRowSelectionAllowed(false);
+        tbl_empleado_usuario.setRowSelectionAllowed(true);
+        tbl_empleado_usuario.setShowGrid(true);
         tbl_empleado_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_empleado_usuarioMouseClicked(evt);
@@ -186,8 +202,8 @@ public class FrmUsuario extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txt_buscar_emp_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         panel_usuario.addTab("Busca Empleado", jPanel1);
@@ -196,13 +212,19 @@ public class FrmUsuario extends javax.swing.JFrame {
 
         jLabel4.setText("ID USUARIO");
 
+        txt_idUsuario_usuario.setEditable(false);
+
         jLabel5.setText("ID LOCAL");
+
+        txt_idLocal_usuario.setEditable(false);
 
         jLabel6.setText("USUARIO");
 
         jLabel7.setText("TIPO USUARIO");
 
         jLabel8.setText("ID EMPLEADO");
+
+        txt_idEmp_usuario.setEditable(false);
 
         btn_grabar_usuario.setText("Grabar");
         btn_grabar_usuario.addActionListener(new java.awt.event.ActionListener() {
@@ -250,12 +272,12 @@ public class FrmUsuario extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_idLocal_usuario)
-                            .addComponent(txt_idUsuario_usuario)
                             .addComponent(cmb_tipoUsuario_usuario, 0, 150, Short.MAX_VALUE)
-                            .addComponent(txt_idEmp_usuario)
                             .addComponent(txt_usuario)
-                            .addComponent(txt_contra_usuario))))
+                            .addComponent(txt_contra_usuario)
+                            .addComponent(txt_idLocal_usuario, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(txt_idUsuario_usuario)
+                            .addComponent(txt_idEmp_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(110, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -277,7 +299,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(txt_contra_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cmb_tipoUsuario_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
@@ -285,7 +307,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txt_idEmp_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_grabar_usuario)
                     .addComponent(btn_eliminar_usuario)
@@ -362,20 +384,20 @@ public class FrmUsuario extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panel_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30))
-                    .addGroup(layout.createSequentialGroup()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txt_buscar_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(24, 24, 24)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btn_salir_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))))
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panel_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))))
         );
 
         pack();
@@ -410,24 +432,23 @@ public class FrmUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_buscar_emp_usuarioKeyReleased
 
     private void tbl_empleado_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_empleado_usuarioMouseClicked
-        int idx = this.tbl_empleado_usuario.getSelectedRow();
-        
-        idEmpleado  = (int) this.dtmEmpleado.getValueAt(idx, 0);
-        
+        // PANEL USUARIO
+        this.panel_usuario.setEnabledAt(0, false);
         this.panel_usuario.setEnabledAt(1, true);
         this.panel_usuario.setSelectedIndex(1);
-                Vector<LocalR> listaLocal = new Vector<LocalR>();
-        listaLocal = lDao.listaLocal();
+        // SELECCION DE FILA
+        int idx = this.tbl_empleado_usuario.getSelectedRow();
+        idEmpleado  = (int) this.dtmEmpleado.getValueAt(idx, 0);
+        // Locales
         int id=0;
-        for (int i =0; i<listaLocal.size();i++){
-            id = listaLocal.get(i).getIdLocalR();
-        }
-        
+        Vector<LocalR> listaLocal = new Vector<LocalR>();
+        listaLocal = lDao.listaLocal();
+        id = listaLocal.get(0).getIdLocalR();
+        // Completa campos
         Util u = new Util();
         this.txt_idUsuario_usuario.setText(Integer.toString(u.idNext("Usuario", "usuarioID")));
         this.txt_idLocal_usuario.setText(Integer.toString(id));
         this.txt_idEmp_usuario.setText(Integer.toString(idEmpleado));
-        this.panel_usuario.setEnabledAt(0, false);
     }//GEN-LAST:event_tbl_empleado_usuarioMouseClicked
 
     private void btn_grabar_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_grabar_usuarioActionPerformed
@@ -472,6 +493,7 @@ public class FrmUsuario extends javax.swing.JFrame {
                 }else{
                     user.setTipoUsuario(4);
                 }
+                user.setContrasena(this.txt_contra_usuario.getText());
                 user.setIdEmpleado(Integer.parseInt(this.txt_idEmp_usuario.getText()));
                 
                 this.uDao.actualizarUsuario(user);
@@ -485,16 +507,34 @@ public class FrmUsuario extends javax.swing.JFrame {
 
     private void tbl_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_usuarioMouseClicked
         this.btn_grabar_usuario.setText("Actualizar");
+        // Cambi Panel
         this.panel_usuario.setSelectedIndex(1);
         this.panel_usuario.setEnabledAt(1, true);
+        // Tabla Seleccion
         int idx = this.tbl_usuario.getSelectedRow();
-        
         this.txt_idUsuario_usuario.setText(this.dtmUsuario.getValueAt(idx,0).toString());
         this.txt_idLocal_usuario.setText(this.dtmUsuario.getValueAt(idx, 1).toString());
         this.txt_usuario.setText(this.dtmUsuario.getValueAt(idx, 2).toString());
         this.cmb_tipoUsuario_usuario.setSelectedItem(this.dtmUsuario.getValueAt(idx, 3).toString());
         this.txt_idEmp_usuario.setText(this.dtmUsuario.getValueAt(idx, 4).toString());
-        this.txt_contra_usuario.setEnabled(false);
+        // variables seleccion
+        int idUsuario = Integer.parseInt(this.dtmUsuario.getValueAt(idx,0).toString());
+        int idLocal = Integer.parseInt(this.dtmUsuario.getValueAt(idx, 1).toString());
+        String usuario = this.dtmUsuario.getValueAt(idx, 2).toString();
+        int tipUsuario;
+        if(this.dtmUsuario.getValueAt(idx, 3).toString().equals("Administrador")){
+            tipUsuario=1;
+        }else if(this.dtmUsuario.getValueAt(idx, 3).toString().equals("Mantenimiento")){
+            tipUsuario=2;
+        }else if(this.dtmUsuario.getValueAt(idx, 3).toString().equals("Reportes")){
+            tipUsuario=3;
+        }else{
+            tipUsuario=4;
+        }
+        int idEmpleado = Integer.parseInt(this.dtmUsuario.getValueAt(idx, 4).toString());
+        //contraseña
+        this.txt_contra_usuario.setText(this.uDao.consultaContra(idUsuario, idLocal, usuario, tipUsuario, idEmpleado));
+        // Bloquea pestaña Empleado
         this.panel_usuario.setEnabledAt(0, false);
     }//GEN-LAST:event_tbl_usuarioMouseClicked
 
@@ -540,7 +580,7 @@ public class FrmUsuario extends javax.swing.JFrame {
         this.panel_usuario.setEnabledAt(1, false);
         this.panel_usuario.setEnabledAt(0, true);
         this.btn_grabar_usuario.setText("Grabar");
-        this.txt_contra_usuario.setEnabled(true);
+        this.txt_contra_usuario.setText("");
     }
     
     

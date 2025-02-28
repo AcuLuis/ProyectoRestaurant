@@ -121,7 +121,24 @@ public class Util {
         String cade = "";
         DbBean con = new DbBean();
         try{
-            String sql = "select "+ nomCampBusq +" from "+ nombTbl +" where "+ campID +" = '"+ cad +"'";
+            String sql = "select "+ nomCampBusq +" from "+ nombTbl +" where "+ campID +" = '"+ cad +"'; ";
+            ResultSet result = con.resultadoSQL(sql);
+            if(result.next()){
+                cade = result.getString(1);
+            }else{
+                cade = "";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return cade;
+    }
+    public String cadExpNum(String nombTbl, String campID, String nomCampBusq, int cad){
+        String cade = "";
+        DbBean con = new DbBean();
+        try{
+            String sql = "select "+ nomCampBusq +" from "+ nombTbl +" where "+ campID +" = "+ cad +"; ";
             ResultSet result = con.resultadoSQL(sql);
             if(result.next()){
                 cade = result.getString(1);
@@ -162,7 +179,7 @@ public class Util {
           String sql="";
 
           //sql = "select CONVERT(varchar,getDate(),103) as fecha";
-          sql = "select getdate() as fecha";
+          sql = " SELECT CAST(GETDATE() AS DATE); ";
 
        try{
             ResultSet resultado=con.resultadoSQL(sql);
