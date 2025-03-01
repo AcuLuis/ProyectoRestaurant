@@ -11,6 +11,7 @@ public class SelCliente extends javax.swing.JDialog {
     ClienteDao clieDao;
     DefaultTableModel dtm;
     Cliente clie;
+    FrmVenta fv = new FrmVenta();
     public SelCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -18,7 +19,13 @@ public class SelCliente extends javax.swing.JDialog {
         clie = new Cliente();
         this.setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        dtm = (DefaultTableModel)this.tbl_cliente_selCliente.getModel();
+        dtm = new DefaultTableModel(new Object[] {"ID", "Nombres", "Apellidos", "Direccion", "Telefono", "Estado"}, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        this.tbl_cliente_selCliente.setModel(dtm);
         llenaTblClientes(false, "");
     }
     public Cliente devuelveCliente(){
@@ -33,6 +40,7 @@ public class SelCliente extends javax.swing.JDialog {
         txt_buscar_cliente = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_cliente_selCliente = new javax.swing.JTable();
+        btn_selCliente_salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -65,6 +73,13 @@ public class SelCliente extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbl_cliente_selCliente);
 
+        btn_selCliente_salir.setText("SALIR");
+        btn_selCliente_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_selCliente_salirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +97,10 @@ public class SelCliente extends javax.swing.JDialog {
                         .addGap(30, 30, 30)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(30, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btn_selCliente_salir)
+                .addGap(39, 39, 39))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,7 +113,9 @@ public class SelCliente extends javax.swing.JDialog {
                     .addComponent(txt_buscar_cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btn_selCliente_salir)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -121,6 +142,10 @@ public class SelCliente extends javax.swing.JDialog {
         
         this.dispose();
     }//GEN-LAST:event_tbl_cliente_selClienteMouseClicked
+
+    private void btn_selCliente_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_selCliente_salirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_selCliente_salirActionPerformed
     private void llenaTblClientes(boolean sw, String cad){
         Vector<Cliente> listaClie;
         listaClie = this.clieDao.ListaCliente(sw, cad);
@@ -138,6 +163,7 @@ public class SelCliente extends javax.swing.JDialog {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_selCliente_salir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

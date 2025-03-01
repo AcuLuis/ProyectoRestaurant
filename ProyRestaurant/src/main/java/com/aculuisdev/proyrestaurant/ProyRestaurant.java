@@ -8,10 +8,11 @@ import UI.FrmInsumo;
 import UI.FrmProducto;
 import UI.FrmRol;
 import UI.FrmUsuario;
+import UI.FrmVenta;
 
 public class ProyRestaurant {
     public static void main(String[] args) {
-        FrmInsumo entra = new FrmInsumo();
+        Entrada entra = new Entrada();
         entra.setVisible(true);
     }
 }

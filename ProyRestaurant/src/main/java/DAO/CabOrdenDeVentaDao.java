@@ -1,4 +1,4 @@
-
+    
 package DAO;
 
 import BEAN.CabOrdenDeVenta;
@@ -11,9 +11,10 @@ public class CabOrdenDeVentaDao {
         public Vector<CabOrdenDeVenta> ListaCodv(boolean sw, String str){
         Vector<CabOrdenDeVenta> lista = new Vector<CabOrdenDeVenta>();
         DbBean con = new DbBean();
+        int id = Integer.parseInt(str);
         String sql = "Select * from CabOrdenDeVenta";
         if(sw == true){
-            sql = sql + " where (clienteID = '"+ str +"')";
+            sql = sql + " where (clienteID = "+ str +")";
         }
         System.out.println(sql);
         try{

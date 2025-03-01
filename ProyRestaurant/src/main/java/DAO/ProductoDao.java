@@ -106,10 +106,11 @@ public class ProductoDao {
     public Vector<Producto> ListaProducto2(boolean sw, String str){
         Vector<Producto> lista = new Vector<Producto>();
         DbBean con = new DbBean();
+        int id = Integer.parseInt(str);
         String sql = "select p.productoId, p.descripProducto, p.idTipProducto, p.precioUnit\n" +
                      "from Producto as p inner join DetOrdenDeVenta as do on p.productoID = do.productoID";
         if(sw == true){
-            sql = sql + " WHERE (do.OrdenDeVentaID = '"+ str +"')";
+            sql = sql + " WHERE (do.OrdenDeVentaID = "+ str +" )";
         }
         System.out.println(sql);
         try{

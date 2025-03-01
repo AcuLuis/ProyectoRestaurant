@@ -76,7 +76,7 @@ public class ClienteDao {
        String sql= "";
        DbBean con=new DbBean();
        if(proc.equals("insert")){
-            sql="INSERT INTO Cliente VALUES ("+ c.getClienteID() +", '"+ c.getNombres() +"', '"+ c.getApellidos() +"', '"+ c.getDni() +"', "+ c.getGenero() +", "+ c.getEstadoCivil() +", "+ c.getTelefono() +", '"+ c.getCorreo() +"', "+ c.getFechNaci() +", "+ c.getEstado() +", '"+ c.getDireccion() +"')";
+            sql="INSERT INTO Cliente VALUES ("+ c.getClienteID() +", '"+ c.getNombres() +"', '"+ c.getApellidos() +"', '"+ c.getDni() +"', "+ c.getGenero() +", '"+ c.getEstadoCivil() +"', "+ c.getTelefono() +", '"+ c.getCorreo() +"', '"+ c.getFechNaci() +"', "+ c.getEstado() +", '"+ c.getDireccion() +"')";
             System.out.println("uuuuuuu" + sql);
        }
        if(proc.equals("update")){

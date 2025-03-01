@@ -18,7 +18,13 @@ public class SelProducto extends javax.swing.JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         productoDao = new ProductoDao();
         prod = new Producto();
-        dtm =(DefaultTableModel)this.tbl_producto_buscarProducto.getModel();
+        dtm = new DefaultTableModel(new Object[]{"ID", "Descripcion", "Tipo", "Precio", "Estado"},0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        this.tbl_producto_buscarProducto.setModel(dtm);
         this.llenaTblProducto(false, "");
     }
     public void llenaTblProducto(boolean sw, String cad){
@@ -45,6 +51,7 @@ public class SelProducto extends javax.swing.JDialog {
         txt_producto_buscarProducto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_producto_buscarProducto = new javax.swing.JTable();
+        btn_salir_buscar_producto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -80,23 +87,32 @@ public class SelProducto extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbl_producto_buscarProducto);
 
+        btn_salir_buscar_producto.setText("SALIR");
+        btn_salir_buscar_producto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salir_buscar_productoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_producto_buscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_salir_buscar_producto, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(115, 115, 115)
+                            .addComponent(jLabel1))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(71, 71, 71)
+                            .addComponent(jLabel2)
+                            .addGap(18, 18, 18)
+                            .addComponent(txt_producto_buscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(14, 14, 14)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -110,7 +126,9 @@ public class SelProducto extends javax.swing.JDialog {
                     .addComponent(txt_producto_buscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btn_salir_buscar_producto)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -138,7 +156,12 @@ public class SelProducto extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_tbl_producto_buscarProductoMouseClicked
 
+    private void btn_salir_buscar_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salir_buscar_productoActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btn_salir_buscar_productoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_salir_buscar_producto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

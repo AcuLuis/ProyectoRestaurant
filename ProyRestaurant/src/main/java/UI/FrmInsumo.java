@@ -10,7 +10,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class FrmInsumo extends javax.swing.JFrame {
+public class FrmInsumo extends javax.swing.JInternalFrame {
     TipInsumoDao tipinsu = new TipInsumoDao();
     InsumoDao insuDao = new InsumoDao();
     DefaultTableModel dtmInsumo;

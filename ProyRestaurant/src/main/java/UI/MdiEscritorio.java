@@ -697,6 +697,10 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_tranControl_ventaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tranControl_ventaActionPerformed
         frmVenta = new FrmVenta();
+        this.desktopPane.add(frmVenta);
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ventana = frmVenta.getSize();
+        frmVenta.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
         frmVenta.setVisible(true);
     }//GEN-LAST:event_mnuItem_tranControl_ventaActionPerformed
 
