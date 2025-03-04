@@ -24,8 +24,10 @@ import javax.swing.JOptionPane;
 
 public class Compartir extends javax.swing.JInternalFrame {
     
+    // credenciales para envio de archivos y mensajes por correo
     private static String emailFrom = "";
     private static String passwordFrom = "";
+    
     private String paraEmail;
     private String asunto;
     private String contenido;

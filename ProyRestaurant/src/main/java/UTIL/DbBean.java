@@ -40,8 +40,10 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
 
 public class DbBean {
+    //credenciales para usar la funcion de envios de archivo por correo
     String emailFrom = "";
     String passwordFrom = "";
+    
     private Connection dbCon;
     private String login = "sa";
     private String password = "123456789"; 
