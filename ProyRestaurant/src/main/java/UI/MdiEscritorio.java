@@ -431,7 +431,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_reporte_rolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_rolActionPerformed
         try{
-            String r = "src/REPORTES/repRolSimple.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repRolSimple.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -501,20 +501,20 @@ public class MdiEscritorio extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuItem_mante_insumoActionPerformed
 
     private void mnuItem_reporte_contratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_contratoActionPerformed
-        try{
-            String r = "src/REPORTES/repContratoSimple.jasper";
-            DbBean db = new DbBean();
+        String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repContratoSimple.jasper";
+        DbBean db = new DbBean();
+        try {
             db.connectRep(r, null, false);
-        }catch(SQLException ex){
-            ex.printStackTrace();
-        }catch(JRException ex){
-            ex.printStackTrace();
+        } catch (SQLException ex) {
+            Logger.getLogger(MdiEscritorio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(MdiEscritorio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_mnuItem_reporte_contratoActionPerformed
 
     private void mnuItem_reporte_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_areaActionPerformed
         try{
-            String r = "src/REPORTES/repAreaSimple.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repAreaSimple.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -526,7 +526,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_reporte_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_productoActionPerformed
         try{
-            String r = "src/REPORTES/reportProdSimp.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\reportProdSimp.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -538,7 +538,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_reporte_insumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_reporte_insumoActionPerformed
         try{
-            String r = "src/REPORTES/repInsSimp.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repInsSimp.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -595,7 +595,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnu_tablas_producto_tipoPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_tablas_producto_tipoPlatoActionPerformed
         try{
-            String r = "src/REPORTES/reporTblCruzProd.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\reporTblCruzProd.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -607,7 +607,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_tablas_contrato_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tablas_contrato_areaActionPerformed
         try{
-            String r = "src/REPORTES/reportContratoTblCruz.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\reportContratoTblCruz.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){
@@ -619,7 +619,7 @@ public class MdiEscritorio extends javax.swing.JFrame {
 
     private void mnuItem_tablas_usuario_ubicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuItem_tablas_usuario_ubicacionActionPerformed
         try{
-            String r = "src/REPORTES/reportTblCruzUsuarios.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\reportTblCruzUsuarios.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, null, false);
         }catch(SQLException ex){

@@ -126,8 +126,6 @@ public class DbBean {
         }
     }
 
-
-    
     public void connectRep(String ruta, HashMap m, boolean sw)throws SQLException, JRException{
             conecta();
             JasperReport reporte = null;
@@ -309,7 +307,7 @@ botoPdf.addActionListener(new ActionListener() {
             
             frame.add(botonGmail, BorderLayout.WEST);
     
-            frame.setSize(800, 650);
+            frame.setSize(800, 580);
             frame.setLocationRelativeTo(null);
             frame.setResizable(false);
             frame.setVisible(true);

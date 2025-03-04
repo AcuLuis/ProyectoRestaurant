@@ -48,13 +48,20 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="txt_fecha_inicio_contratoxfechas" max="32767" attributes="0"/>
-                                      <Component id="txt_fecha_fin_contratoxfechas" pref="150" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="txt_fecha_inicio_contratoxfechas" max="32767" attributes="0"/>
+                                          <Component id="txt_fecha_fin_contratoxfechas" pref="150" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="btn_fecha_ini_contratoxfechas" min="-2" max="-2" attributes="0"/>
+                                          <Component id="btn_fecha_fin_contratoxfechas" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="205" max="32767" attributes="0"/>
+                              <EmptySpace pref="105" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -73,13 +80,15 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txt_fecha_inicio_contratoxfechas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn_fecha_ini_contratoxfechas" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txt_fecha_fin_contratoxfechas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn_fecha_fin_contratoxfechas" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="41" max="32767" attributes="0"/>
+              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="btn_salircontratoxfechas" pref="45" max="32767" attributes="0"/>
                   <Component id="btn_reporte_contratoxfechas" max="32767" attributes="0"/>
@@ -114,8 +123,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_fecha_inicio_contratoxfechas">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txt_fecha_fin_contratoxfechas">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btn_reporte_contratoxfechas">
       <Properties>
@@ -131,6 +146,22 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_salircontratoxfechasActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_fecha_ini_contratoxfechas">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="FECHA"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_fecha_ini_contratoxfechasActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_fecha_fin_contratoxfechas">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="FECHA"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_fecha_fin_contratoxfechasActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

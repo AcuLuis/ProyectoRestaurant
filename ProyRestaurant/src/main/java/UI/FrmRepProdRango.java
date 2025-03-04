@@ -106,7 +106,7 @@ public class FrmRepProdRango extends javax.swing.JInternalFrame {
         map.put("parPrecMin",d);
         map.put("parPrecMax",a);
         try{
-            String r = "src/REPORTES/reporProdParam.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\reporProdParam.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, map, true);
         }catch(SQLException e){

@@ -13,6 +13,7 @@ public class FrmContratoPorArea extends javax.swing.JInternalFrame{
     AreaDao areaDao = new AreaDao();
     public FrmContratoPorArea() {
         initComponents();
+        this.llenaCmbArea();
     }
     private void llenaCmbArea(){
         
@@ -41,6 +42,12 @@ public class FrmContratoPorArea extends javax.swing.JInternalFrame{
         jLabel1.setText("REPORTE POR AREA");
 
         jLabel2.setText("AREA");
+
+        cmb_area.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_areaActionPerformed(evt);
+            }
+        });
 
         btn_reporte_area.setText("Producir Reporte");
         btn_reporte_area.addActionListener(new java.awt.event.ActionListener() {
@@ -105,11 +112,11 @@ public class FrmContratoPorArea extends javax.swing.JInternalFrame{
         
         HashMap map = new HashMap();
         
-        map.put("descripArea", seleccionArea);
+        map.put("DESCRIPCIONAREA", seleccionArea);
         
         try{
         
-            String r = "src/REPORTES/repContratoPorArea.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repContratoPorArea.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, map, true);
         }catch(SQLException e){
@@ -121,6 +128,10 @@ public class FrmContratoPorArea extends javax.swing.JInternalFrame{
         }
         this.dispose();
     }//GEN-LAST:event_btn_reporte_areaActionPerformed
+
+    private void cmb_areaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_areaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_areaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_reporte_area;

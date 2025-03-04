@@ -103,7 +103,7 @@ public class FrmInsumoPorPrecioUnitario extends javax.swing.JInternalFrame {
         map.put("precioMin",d);
         map.put("precioMax",a);
         try{
-            String r = "src/REPORTES/repInsumoPorPrecio.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repInsumoPorPrecio.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, map, true);
         }catch(SQLException e){

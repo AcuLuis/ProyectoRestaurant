@@ -2,8 +2,12 @@
 package UI;
 
 import UTIL.DbBean;
+import com.toedter.calendar.JDateChooser;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 
 public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
@@ -24,6 +28,8 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
         txt_fecha_fin_contratoxfechas = new javax.swing.JTextField();
         btn_reporte_contratoxfechas = new javax.swing.JButton();
         btn_salircontratoxfechas = new javax.swing.JButton();
+        btn_fecha_ini_contratoxfechas = new javax.swing.JButton();
+        btn_fecha_fin_contratoxfechas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -36,6 +42,10 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
 
         jLabel4.setText("FECHA FIN");
 
+        txt_fecha_inicio_contratoxfechas.setEditable(false);
+
+        txt_fecha_fin_contratoxfechas.setEditable(false);
+
         btn_reporte_contratoxfechas.setText("Producir Reporte");
         btn_reporte_contratoxfechas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -47,6 +57,20 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
         btn_salircontratoxfechas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_salircontratoxfechasActionPerformed(evt);
+            }
+        });
+
+        btn_fecha_ini_contratoxfechas.setText("FECHA");
+        btn_fecha_ini_contratoxfechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_fecha_ini_contratoxfechasActionPerformed(evt);
+            }
+        });
+
+        btn_fecha_fin_contratoxfechas.setText("FECHA");
+        btn_fecha_fin_contratoxfechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_fecha_fin_contratoxfechasActionPerformed(evt);
             }
         });
 
@@ -76,11 +100,16 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
                                 .addGap(17, 17, 17))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txt_fecha_inicio_contratoxfechas)
-                                        .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txt_fecha_inicio_contratoxfechas)
+                                            .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btn_fecha_ini_contratoxfechas)
+                                            .addComponent(btn_fecha_fin_contratoxfechas)))
                                     .addComponent(jLabel2))
-                                .addContainerGap(205, Short.MAX_VALUE))))))
+                                .addContainerGap(105, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,12 +121,14 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txt_fecha_inicio_contratoxfechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
+                    .addComponent(txt_fecha_inicio_contratoxfechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_fecha_ini_contratoxfechas))
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                    .addComponent(txt_fecha_fin_contratoxfechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_fecha_fin_contratoxfechas))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btn_salircontratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                     .addComponent(btn_reporte_contratoxfechas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -108,36 +139,95 @@ public class FrmContratoPorFechas extends javax.swing.JInternalFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_reporte_contratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reporte_contratoxfechasActionPerformed
-        String fechaIni, fechaFin;
-        
-        fechaIni = this.txt_fecha_inicio_contratoxfechas.getText();
-        fechaFin = this.txt_fecha_fin_contratoxfechas.getText();
-        
-        HashMap map = new HashMap();
-        
-        map.put("fechaIni", fechaIni);
-        map.put("fechaFin", fechaFin);
-        
-        try{
-        
-            String r = "src/REPORTES/repContratoPorFechas.jasper";
-            DbBean db = new DbBean();
-            db.connectRep(r, map, true);
-        }catch(SQLException e){
-        
-            e.printStackTrace();
-        }catch(JRException ex){
-        
-            ex.printStackTrace();
-        }
+    String fechaIni = txt_fecha_inicio_contratoxfechas.getText().trim();
+    String fechaFin = txt_fecha_fin_contratoxfechas.getText().trim();
+    
+    // Validar que las fechas no estén vacías
+    if (fechaIni.isEmpty() || fechaFin.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debe ingresar ambas fechas.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    HashMap<String, Object> map = new HashMap<>();
+    map.put("FECHAINICIO", fechaIni);
+    map.put("FECHAFIN", fechaFin);
+
+    try {
+        String reportePath = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repContratoPorFechas.jasper";
+        DbBean db = new DbBean();
+        db.connectRep(reportePath, map, true);
+
+        // Si todo se ejecutó correctamente, cerramos la ventana
         this.dispose();
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (JRException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btn_reporte_contratoxfechasActionPerformed
 
     private void btn_salircontratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salircontratoxfechasActionPerformed
         this.dispose();
     }//GEN-LAST:event_btn_salircontratoxfechasActionPerformed
 
+    private void btn_fecha_ini_contratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_fecha_ini_contratoxfechasActionPerformed
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("yyyy-MM-dd"); // Formato de visualización en JDateChooser
+
+        // Mostrarlo dentro de un JOptionPane
+        int opcion = JOptionPane.showConfirmDialog(null, dateChooser, "Seleccione una Fecha", JOptionPane.OK_CANCEL_OPTION);
+
+        if (opcion == JOptionPane.OK_OPTION) {
+            Date fechaSeleccionada = dateChooser.getDate();
+            if (fechaSeleccionada != null) {
+                // Formatear la fecha antes de mostrarla en el JTextField
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormateadaINI = sdf.format(fechaSeleccionada);
+                this.txt_fecha_inicio_contratoxfechas.setText(fechaFormateadaINI);
+                
+            } else {
+                JOptionPane.showMessageDialog(null, "No se seleccionó ninguna fecha.");
+            }
+        }
+    }//GEN-LAST:event_btn_fecha_ini_contratoxfechasActionPerformed
+
+    private void btn_fecha_fin_contratoxfechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_fecha_fin_contratoxfechasActionPerformed
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.setDateFormatString("yyyy-MM-dd"); // Formato de visualización en JDateChooser
+
+        // Mostrarlo dentro de un JOptionPane
+        int opcion = JOptionPane.showConfirmDialog(null, dateChooser, "Seleccione una Fecha", JOptionPane.OK_CANCEL_OPTION);
+
+        if (opcion == JOptionPane.OK_OPTION) {
+            Date fechaSeleccionada = dateChooser.getDate();
+            if (fechaSeleccionada != null) {
+                // Formatear la fecha antes de mostrarla en el JTextField
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormateadaFin = sdf.format(fechaSeleccionada);
+                String fechaInicioTexto = this.txt_fecha_inicio_contratoxfechas.getText();
+                 try {
+                    Date fechaInicio = sdf.parse(fechaInicioTexto);
+
+                    if (fechaSeleccionada.compareTo(fechaInicio) >= 0) {
+                        this.txt_fecha_fin_contratoxfechas.setText(fechaFormateadaFin);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "La fecha de fin debe ser igual o posterior a la fecha de inicio.");
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Error al convertir la fecha de inicio.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "No se seleccionó ninguna fecha.");
+            }
+        }
+    }//GEN-LAST:event_btn_fecha_fin_contratoxfechasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_fecha_fin_contratoxfechas;
+    private javax.swing.JButton btn_fecha_ini_contratoxfechas;
     private javax.swing.JButton btn_reporte_contratoxfechas;
     private javax.swing.JButton btn_salircontratoxfechas;
     private javax.swing.JLabel jLabel1;

@@ -110,11 +110,11 @@ public class FrmContratoPorRol extends javax.swing.JInternalFrame {
         
         HashMap map = new HashMap();
         
-        map.put("Descripcion", seleccionRol);
+        map.put("DESCRIPCION", seleccionRol);
         
         try{
         
-            String r = "src/REPORTES/repContratoPorRol.jasper";
+            String r = "C:\\ProyectoRestaurant\\ProyectoRestaurant\\ProyRestaurant\\src\\main\\java\\REPORTES\\repContratoPorRol.jasper";
             DbBean db = new DbBean();
             db.connectRep(r, map, true);
         }catch(SQLException e){
